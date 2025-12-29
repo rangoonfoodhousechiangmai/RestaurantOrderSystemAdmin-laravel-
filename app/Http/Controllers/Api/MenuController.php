@@ -16,4 +16,13 @@ class MenuController extends Controller
             'data'    => $menus
         ]);
     }
+
+    public function show(Menu $menu)
+    {
+        $menu->load('category');
+        return response()->json([
+            'success' => true,
+            'data'    => $menu
+        ]);
+    }
 }

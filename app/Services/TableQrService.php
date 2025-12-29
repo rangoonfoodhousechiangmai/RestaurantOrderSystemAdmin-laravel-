@@ -19,7 +19,7 @@ class TableQrService
      */
     public function generateTableUrl(Table $table): string
     {
-        $frontend = config('frontend.url', 'http://localhost:3000');
+        $frontend = config('fronted.url');
         return "{$frontend}/table/{$table->slug}/{$table->qr_token}";
     }
 
