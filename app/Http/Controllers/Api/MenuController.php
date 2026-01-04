@@ -10,7 +10,9 @@ class MenuController extends Controller
 {
     public function index()
     {
-        $menus = Menu::with('category')->latest()->get();
+        $menus = Menu::with('category')->latest()
+            ->where('is_available', true)
+            ->get();
         return response()->json([
             'success' => true,
             'data'    => $menus
@@ -19,7 +21,7 @@ class MenuController extends Controller
 
     public function show(Menu $menu)
     {
-        $menu->load('category');
+        $menu->load(['category', 'modifiers']);
         return response()->json([
             'success' => true,
             'data'    => $menu
