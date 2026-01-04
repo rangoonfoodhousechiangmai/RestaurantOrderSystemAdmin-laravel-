@@ -30,11 +30,6 @@ class Menu extends Model
         }
     }
 
-    public function menuVariants(): HasMany
-    {
-        return $this->hasMany(MenuVariant::class);
-    }
-
     public function modifiers()
     {
         return $this->belongsToMany(Modifier::class, 'menu_modifiers')
