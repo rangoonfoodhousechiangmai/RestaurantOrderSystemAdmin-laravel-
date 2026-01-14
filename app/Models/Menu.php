@@ -22,6 +22,8 @@ class Menu extends Model
         'is_available',
     ];
 
+    protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
+
     public function scopeFilter(Builder $query)
     {
         if (request('searchName')) {

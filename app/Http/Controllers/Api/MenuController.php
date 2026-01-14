@@ -21,7 +21,10 @@ class MenuController extends Controller
 
     public function show(Menu $menu)
     {
-        $menu->load(['category', 'modifiers']);
+        // $menu->load(['category:id,eng_name,mm_name', 'modifiers:id,name,selection_type,price']);
+        $menu->load(['category'=>function($query) {
+            $query->select('id', 'mm_name', 'eng_name');
+        }, 'modifiers']);
         return response()->json([
             'success' => true,
             'data'    => $menu
