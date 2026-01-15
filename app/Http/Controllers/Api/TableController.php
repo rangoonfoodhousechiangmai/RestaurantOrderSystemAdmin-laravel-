@@ -38,7 +38,7 @@ class TableController extends Controller
                     'slug' => $table->slug,
                 ],
                 'session_token' => $sessionToken,
-                'expires_at' => now()->addHours(2)->toIso8601String()
+                // 'expires_at' => now()->addHours(2)->toIso8601String()
             ]
         ]);
     }

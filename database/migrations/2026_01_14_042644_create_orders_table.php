@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('order_code')->unique(); // e.g., ORD-20260111-001
             $table->string('order_token')->unique();
             $table->unsignedBigInteger('table_id')->nullable();
-            $table->unsignedBigInteger('table_session_id')->nullable();
+            $table->string('table_session_token')->nullable();
             $table->enum('order_type', ['dine_in', 'take_away'])->default('dine_in');
             $table->integer('total_price');
             $table->integer('total_qty')->default(0);
