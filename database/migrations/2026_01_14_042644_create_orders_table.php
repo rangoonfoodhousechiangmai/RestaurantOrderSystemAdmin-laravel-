@@ -20,7 +20,7 @@ return new class extends Migration
             $table->enum('order_type', ['dine_in', 'take_away'])->default('dine_in');
             $table->integer('total_price');
             $table->integer('total_qty')->default(0);
-            $table->enum('status', ['pending', 'confirmed', 'preparing', 'ready', 'completed', 'cancelled'])->default('pending');
+            $table->enum('status', ['pending', 'preparing', 'delivered', 'completed', 'cancelled'])->default('pending');
             $table->timestamps();
         });
     }

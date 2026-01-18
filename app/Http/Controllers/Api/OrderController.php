@@ -21,156 +21,168 @@ use Illuminate\Validation\Rule;
 
 class OrderController extends Controller
 {
-        public function store(Request $request)
-        {
-            $validator = Validator::make($request->all(), [
-                'table_session_token' => 'nullable|string',
-                'order_type' => 'required|in:dine_in,take_away',
-                'items' => 'required|array|min:1',
-                'items.*.menu_id' => 'required|integer|exists:menus,id',
-                'items.*.quantity' => 'required|integer|min:1',
-                'items.*.protein_id' => 'nullable|integer',
-                'items.*.flavor_id' => 'nullable|integer',
-                'items.*.addon_ids' => 'nullable|array',
-                'items.*.addon_ids.*' => 'integer|exists:modifiers,id',
-                'items.*.special_request' => 'nullable|string',
+
+    public function index()
+    {
+        $orders = Order::with('table')->orderBy('created_at', 'desc')->get();
+
+        return response()->json(['orders' => $orders], 200);
+    }
+
+
+
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'table_session_token' => 'nullable|string',
+            'order_type' => 'required|in:dine_in,take_away',
+            'items' => 'required|array|min:1',
+            'items.*.menu_id' => 'required|integer|exists:menus,id',
+            'items.*.quantity' => 'required|integer|min:1',
+            'items.*.protein_id' => 'nullable|integer',
+            'items.*.flavor_id' => 'nullable|integer',
+            'items.*.addon_ids' => 'nullable|array',
+            'items.*.addon_ids.*' => 'integer|exists:modifiers,id',
+            'items.*.special_request' => 'nullable|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        DB::beginTransaction();
+        try {
+
+            $tableSession = $this->validateTableSession($request->table_session_token);
+            $orderCode = Helper::generateOrderCode();
+            $orderToken = Helper::generateOrderToken();
+
+            // creating order
+            $order = Order::create([
+                'order_code' => $orderCode,
+                'order_token' => $orderToken,
+                'table_id' => $tableSession->table_id,
+                'table_session_token' => $tableSession->session_token,
+                'order_type' => $request->order_type,
+                'total_price' => 0,
+                'total_qty' => 0,
+                'status' => 'pending',
             ]);
 
-            if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 422);
-            }
+            $totalPrice = 0;
+            $totalQty = 0;
 
-            DB::beginTransaction();
-            try {
+            // creating order items
+            foreach ($request->items as $itemData) {
+                $menu = Menu::find($itemData['menu_id']);
+                $itemPrice = $menu->price;
+                $itemTotalPrice = $itemPrice * $itemData['quantity'];
 
-                $tableSession = $this->validateTableSession($request->table_session_token);
-                $orderCode = Helper::generateOrderCode();
-                $orderToken = Helper::generateOrderToken();
+                // Check if menu has protein or flavor modifiers
+                $menuModifiers = $menu->modifiers;
+                $hasProtein = $menuModifiers->where('type', 'protein')->isNotEmpty();
+                $hasFlavor = $menuModifiers->where('type', 'flavor')->isNotEmpty();
 
-                // creating order
-                $order = Order::create([
-                    'order_code' => $orderCode,
-                    'order_token' => $orderToken,
-                    'table_id' => $tableSession->table_id,
-                    'table_session_token' => $tableSession->session_token,
-                    'order_type' => $request->order_type,
-                    'total_price' => 0,
-                    'total_qty' => 0,
-                    'status' => 'pending',
+                if ($hasProtein && !$itemData['protein_id']) {
+                    throw new \Exception('Protein selection is required for this menu item.');
+                }
+                if ($hasFlavor && !$itemData['flavor_id']) {
+                    throw new \Exception('Flavor selection is required for this menu item.');
+                }
+
+                $orderItem = OrderItem::create([
+                    'order_id' => $order->id,
+                    'menu_id' => $itemData['menu_id'],
+                    'quantity' => $itemData['quantity'],
+                    'price' => $itemPrice,
+                    'total_price' => $itemTotalPrice,
+                    'special_request' => $itemData['special_request'] ?? null,
                 ]);
 
-                $totalPrice = 0;
-                $totalQty = 0;
+                $totalPrice += $itemTotalPrice;
+                $totalQty += $itemData['quantity'];
 
-                // creating order items
-                foreach ($request->items as $itemData) {
-                    $menu = Menu::find($itemData['menu_id']);
-                    $itemPrice = $menu->price;
-                    $itemTotalPrice = $itemPrice * $itemData['quantity'];
+                if (!empty($itemData['addon_ids'])) {
+                    foreach ($itemData['addon_ids'] as $addonId) {
+                        $modifier = Modifier::find($addonId);
+                        $modifierPrice = $modifier->price;
 
-                    // Check if menu has protein or flavor modifiers
-                    $menuModifiers = $menu->modifiers;
-                    $hasProtein = $menuModifiers->where('type', 'protein')->isNotEmpty();
-                    $hasFlavor = $menuModifiers->where('type', 'flavor')->isNotEmpty();
+                        OrderItemModifier::create([
+                            'order_item_id' => $orderItem->id,
+                            'modifier_id' => $addonId,
+                            'name' => $modifier->name,
+                            'price' => $modifierPrice,
+                        ]);
 
-                    if ($hasProtein && !$itemData['protein_id']) {
-                        throw new \Exception('Protein selection is required for this menu item.');
-                    }
-                    if ($hasFlavor && !$itemData['flavor_id']) {
-                        throw new \Exception('Flavor selection is required for this menu item.');
-                    }
-
-                    $orderItem = OrderItem::create([
-                        'order_id' => $order->id,
-                        'menu_id' => $itemData['menu_id'],
-                        'quantity' => $itemData['quantity'],
-                        'price' => $itemPrice,
-                        'total_price' => $itemTotalPrice,
-                        'special_request' => $itemData['special_request'] ?? null,
-                    ]);
-
-                    $totalPrice += $itemTotalPrice;
-                    $totalQty += $itemData['quantity'];
-
-                    if (!empty($itemData['addon_ids'])) {
-                        foreach ($itemData['addon_ids'] as $addonId) {
-                            $modifier = Modifier::find($addonId);
-                            $modifierPrice = $modifier->price;
-
-                            OrderItemModifier::create([
-                                'order_item_id' => $orderItem->id,
-                                'modifier_id' => $addonId,
-                                'name' => $modifier->name,
-                                'price' => $modifierPrice,
-                            ]);
-
-                            // update price for each item with modifier price
-                            $itemTotalPrice += $modifierPrice * $itemData['quantity'];
-                            $totalPrice += $modifierPrice * $itemData['quantity'];
-                        }
-
-                        // Update order item total price if modifiers added
-                        $orderItem->update(['total_price' => $itemTotalPrice]);
+                        // update price for each item with modifier price
+                        $itemTotalPrice += $modifierPrice * $itemData['quantity'];
+                        $totalPrice += $modifierPrice * $itemData['quantity'];
                     }
 
-                    $proteinPrice = 0;
-                    $flavorPrice = 0;
-
-                    if ($itemData['protein_id']) {
-                        $proteinModifier = Modifier::find($itemData['protein_id']);
-                        if ($proteinModifier) {
-                            OrderItemModifier::create([
-                                'order_item_id' => $orderItem->id,
-                                'modifier_id' => $proteinModifier->id,
-                                'name' => $proteinModifier->name,
-                                'price' => $proteinModifier->price,
-                            ]);
-                            $proteinPrice = $proteinModifier->price;
-                        }
-                    }
-
-                    if ($itemData['flavor_id']) {
-                        $flavorModifier = Modifier::find($itemData['flavor_id']);
-                        if ($flavorModifier) {
-                            OrderItemModifier::create([
-                                'order_item_id' => $orderItem->id,
-                                'modifier_id' => $flavorModifier->id,
-                                'name' => $flavorModifier->name,
-                                'price' => $flavorModifier->price,
-                            ]);
-                            $flavorPrice = $flavorModifier->price;
-                        }
-                    }
-
-                    $itemTotalPrice += ($proteinPrice + $flavorPrice) * $itemData['quantity'];
-                    $totalPrice += ($proteinPrice + $flavorPrice) * $itemData['quantity'];
-
-                    // Update order item total price after adding protein and flavor
+                    // Update order item total price if modifiers added
                     $orderItem->update(['total_price' => $itemTotalPrice]);
                 }
 
-                $order->update([
-                    'total_price' => $totalPrice,
-                    'total_qty' => $totalQty,
-                ]);
+                $proteinPrice = 0;
+                $flavorPrice = 0;
 
-                DB::commit();
+                if ($itemData['protein_id']) {
+                    $proteinModifier = Modifier::find($itemData['protein_id']);
+                    if ($proteinModifier) {
+                        OrderItemModifier::create([
+                            'order_item_id' => $orderItem->id,
+                            'modifier_id' => $proteinModifier->id,
+                            'name' => $proteinModifier->name,
+                            'price' => $proteinModifier->price,
+                        ]);
+                        $proteinPrice = $proteinModifier->price;
+                    }
+                }
 
-                return response()->json(['order_token' => $orderToken], 201);
-            } catch (\Exception $e) {
-                logger($e->getMessage());
-                DB::rollBack();
-                return response()->json(['error' => $e->getMessage()], 500);
+                if ($itemData['flavor_id']) {
+                    $flavorModifier = Modifier::find($itemData['flavor_id']);
+                    if ($flavorModifier) {
+                        OrderItemModifier::create([
+                            'order_item_id' => $orderItem->id,
+                            'modifier_id' => $flavorModifier->id,
+                            'name' => $flavorModifier->name,
+                            'price' => $flavorModifier->price,
+                        ]);
+                        $flavorPrice = $flavorModifier->price;
+                    }
+                }
+
+                $itemTotalPrice += ($proteinPrice + $flavorPrice) * $itemData['quantity'];
+                $totalPrice += ($proteinPrice + $flavorPrice) * $itemData['quantity'];
+
+                // Update order item total price after adding protein and flavor
+                $orderItem->update(['total_price' => $itemTotalPrice]);
             }
-        }
 
+            $order->update([
+                'total_price' => $totalPrice,
+                'total_qty' => $totalQty,
+            ]);
+
+            DB::commit();
+
+            return response()->json(['order_token' => $orderToken], 201);
+        } catch (\Exception $e) {
+            logger($e->getMessage());
+            DB::rollBack();
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+
+    
 
     private function validateTableSession($session_token)
     {
         $tableSession = TableSession::where('session_token', $session_token)
             ->where('expires_at', '>', now())
             ->first();
-
+        logger('tableSession', ['tableSession' => $tableSession]);
         if (!$tableSession) {
             throw new \Exception('Scan the Qr code plz.');
         }

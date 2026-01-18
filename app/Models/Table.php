@@ -24,5 +24,9 @@ class Table extends Model
         'qr_code_path',
     ];
 
-    
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
 }

@@ -13,7 +13,7 @@ class Order extends Model
         'order_code',
         'order_token',
         'table_id',
-        'table_session_id',
+        'table_session_token',
         'order_type',
         'total_price',
         'total_qty',
@@ -23,5 +23,10 @@ class Order extends Model
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function table()
+    {
+        return $this->belongsTo(Table::class);
     }
 }

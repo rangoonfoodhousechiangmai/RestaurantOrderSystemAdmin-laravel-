@@ -42,4 +42,9 @@ class Menu extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function orderItems(): HasMany
+    {
+        return $this->hasMany(OrderItem::class);
+    }
 }

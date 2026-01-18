@@ -24,3 +24,4 @@ Route::get('/menus/{menu}', [\App\Http\Controllers\Api\MenuController::class, 's
 
 Route::post('/tables/verify', [\App\Http\Controllers\Api\TableController::class, 'verify']);
 Route::post('/orders', [App\Http\Controllers\Api\OrderController::class, 'store']);
+Route::get('/orders', [App\Http\Controllers\Api\OrderController::class, 'index']);

@@ -29,6 +29,13 @@
                 <span class="menu-title">Modifiers</span>
             </a>
         </li>
+        <li class="nav-item {{ isset($elementActive) && $elementActive == 'orders' ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('orders.index') }}">
+                {{-- <i class="icon-grid menu-icon"></i> --}}
+                <i class="fa-regular fa-newspaper fa-2x menu-icon"></i>
+                <span class="menu-title">Orders</span>
+            </a>
+        </li>
         {{-- <li class="nav-item {{ isset($elementActive) && $elementActive == 'menu-modifiers' ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('menu-modifiers.index') }}">
                 <i class="fa-regular fa-newspaper fa-2x menu-icon"></i>

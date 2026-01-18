@@ -23,8 +23,8 @@ class ModifierStoreRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255|unique:modifiers,name',
-            'type' => 'required|in:avoid,addon,flavor,protein',
-            'price' => 'nullable|integer|required_if:type,addon|min:0',
+            'type' => 'required|in:addon,flavor,protein',
+            'price' => 'integer|required',
             'selection_type' => 'required|in:single,multiple',
         ];
     }

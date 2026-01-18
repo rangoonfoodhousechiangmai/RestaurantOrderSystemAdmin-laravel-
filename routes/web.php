@@ -75,4 +75,9 @@ Route::middleware([
     // generate QR for table
     Route::post('/tables/{table}/regenerate-qr', [TableController::class, 'reGenerateQr'])->name('tables.regenerate-qr');
 
+    // orders
+    Route::get('/orders', [\App\Http\Controllers\OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}', [\App\Http\Controllers\OrderController::class, 'show'])->name('orders.show');
+    Route::post('/orders/{order}/items/{itemId}', [\App\Http\Controllers\OrderController::class, 'updateOrderItem'])->name('orders.update');
+
 });
