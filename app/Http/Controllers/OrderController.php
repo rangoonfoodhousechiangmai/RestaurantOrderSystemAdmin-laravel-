@@ -35,7 +35,7 @@ class OrderController extends Controller
 
     public function updateOrderItem(Request $request, $itemId)
     {
-        dd($request->all(), $itemId);
+        // dd($request->all(), $itemId);
         $validator = Validator::make($request->all(), [
             'quantity' => 'required|integer|min:1',
             'protein_id' => 'nullable|integer|exists:modifiers,id',
@@ -121,5 +121,20 @@ class OrderController extends Controller
             DB::rollBack();
             return response()->json(['error' => $e->getMessage()], 500);
         }
+    }
+
+    public function updateStatus(Request $request, Order $order)
+    {
+        $validator = Validator::make($request->all(), [
+            'status' => 'required|in:pending,preparing,delivered,completed,cancelled',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $order->update(['status' => $request->status]);
+
+        return response()->json(['message' => 'Order status updated successfully.'], 200);
     }
 }

@@ -54,14 +54,14 @@
                                         </div>
 
                                         {{-- Price input shown only for certain types, hidden by default --}}
-                                        @if (in_array($modifier->type, ['protein']))
+                                        {{-- @if (in_array($modifier->type, ['protein']))
                                             @php
                                                 $existingPrice = $menu->modifiers->where('id', $modifier->id)->first()?->pivot->price ?? '';
                                             @endphp
                                             <input type="number" name="modifier_price[{{ $modifier->id }}]" min="0"
                                                 class="form-control modifier-price mt-2" placeholder="Enter price" value="{{ $existingPrice }}"
                                                 style="display: {{ in_array($modifier->id, $selectedModifierIds) ? 'block' : 'none' }};">
-                                        @endif
+                                        @endif --}}
                                     </div>
                                 @endforeach
                             </div>
@@ -82,13 +82,14 @@
 
 @push('js')
     <script>
-        document.querySelectorAll('.modifier-checkbox').forEach(function(checkbox) {
-            checkbox.addEventListener('change', function() {
-                const priceInput = this.closest('div.col-6').querySelector('.modifier-price');
-                if (priceInput) {
-                    priceInput.style.display = this.checked ? 'block' : 'none';
-                }
-            });
-        });
+        // hide price field for modifier protein
+        // document.querySelectorAll('.modifier-checkbox').forEach(function(checkbox) {
+        //     checkbox.addEventListener('change', function() {
+        //         const priceInput = this.closest('div.col-6').querySelector('.modifier-price');
+        //         if (priceInput) {
+        //             priceInput.style.display = this.checked ? 'block' : 'none';
+        //         }
+        //     });
+        // });
     </script>
 @endpush

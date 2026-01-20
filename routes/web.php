@@ -78,6 +78,7 @@ Route::middleware([
     // orders
     Route::get('/orders', [\App\Http\Controllers\OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [\App\Http\Controllers\OrderController::class, 'show'])->name('orders.show');
+    Route::post('/orders/{order}/update-status', [\App\Http\Controllers\OrderController::class, 'updateStatus'])->name('orders.update-status');
     Route::post('/orders/{order}/items/{itemId}', [\App\Http\Controllers\OrderController::class, 'updateOrderItem'])->name('orders.update');
 
 });

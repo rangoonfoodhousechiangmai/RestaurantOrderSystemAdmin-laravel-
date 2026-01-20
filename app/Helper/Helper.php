@@ -8,7 +8,7 @@ class Helper
 {
     public static function generateOrderCode()
     {
-        return 'ORD-' . date('Ymd') . '-' . str_pad(mt_rand(1, 999), 3, '0', STR_PAD_LEFT);
+        return 'ORD-' . date('Ymd') . '-' . strtoupper(bin2hex(random_bytes(4)));
     }
 
     public static function generateOrderToken()

@@ -58,7 +58,7 @@
                                     <div class="mb-2">
                                         <div class="mb-2"><strong>Protein:</strong></div>
                                         <select class="form-control protein-select" style="width: 100%;">
-                                            <option value="">Select Protein</option>
+                                            <option value="" disabled>Select Protein</option>
                                             @foreach($proteinModifiers as $modifier)
                                             <option value="{{ $modifier->id }}" {{ $item->orderItemModifiers->where('modifier_id', $modifier->id)->isNotEmpty() ? 'selected' : '' }}>
                                                 {{ $modifier->name }} (+{{ number_format($modifier->price, 2) }} THB)
