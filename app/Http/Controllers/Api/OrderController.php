@@ -22,11 +22,12 @@ use Illuminate\Validation\Rule;
 class OrderController extends Controller
 {
 
-    public function index()
+    public function getOrderHistory(Request $request)
     {
-        $orders = Order::with('table')->orderBy('created_at', 'desc')->get();
+        // dd($request->orderToken);
+        // $orders = Order::with('table')->orderBy('created_at', 'desc')->get();
 
-        return response()->json(['orders' => $orders], 200);
+        return response()->json(['orders' => $request->orderToken], 200);
     }
 
 
@@ -175,7 +176,7 @@ class OrderController extends Controller
     }
 
 
-    
+
 
     private function validateTableSession($session_token)
     {

@@ -33,9 +33,8 @@ class OrderController extends Controller
         return view('orders.order-items', compact('order'));
     }
 
-    public function updateOrderItem(Request $request, $itemId)
+    public function updateOrderItem(Request $request, Order $order, $itemId)
     {
-        // dd($request->all(), $itemId);
         $validator = Validator::make($request->all(), [
             'quantity' => 'required|integer|min:1',
             'protein_id' => 'nullable|integer|exists:modifiers,id',
@@ -51,15 +50,22 @@ class OrderController extends Controller
         DB::beginTransaction();
         try {
             $orderItem = OrderItem::findOrFail($itemId);
-            $order = $orderItem->order;
+
+            // Ensure the order item belongs to the specified order
+            if ($orderItem->order->order_code !== $order->order_code) {
+                return response()->json(['error' => 'Unauthorized'], 403);
+            }
             $menu = $orderItem->menu;
+
 
             // Update quantity
             $orderItem->quantity = $request->quantity;
 
-            // Calculate base price
+            // Calculate base price in order item
+            // price can change overtime, so take record for the price.
             $itemPrice = $menu->price;
-            $itemTotalPrice = $itemPrice * $request->quantity;
+            $itemTotalPrice = $orderItem->price * $request->quantity;
+            // dd($orderItem->menu->eng_name, $orderItem->price, $itemTotalPrice);
 
             // Remove existing modifiers
             $orderItem->orderItemModifiers()->delete();
@@ -101,8 +107,8 @@ class OrderController extends Controller
                     $modifierPrice += $addonModifier->price;
                 }
             }
-
             $itemTotalPrice += $modifierPrice * $request->quantity;
+
             $orderItem->total_price = $itemTotalPrice;
             $orderItem->save();
 

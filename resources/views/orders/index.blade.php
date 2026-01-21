@@ -103,8 +103,8 @@
     <script>
         $(document).ready(function() {
             $('.status-select').on('change', function() {
-                console.log("hello world");
                 var orderId = $(this).data('order-id');
+                console.log(orderId);
                 var status = $(this).val();
                 var selectElement = $(this);
 
