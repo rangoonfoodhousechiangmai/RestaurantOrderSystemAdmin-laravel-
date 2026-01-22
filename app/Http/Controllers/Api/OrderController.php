@@ -24,10 +24,17 @@ class OrderController extends Controller
 
     public function getOrderHistory(Request $request)
     {
-        // dd($request->orderToken);
-        // $orders = Order::with('table')->orderBy('created_at', 'desc')->get();
+        $tableSession = $this->validateTableSession($request->tableSessionToken);
 
-        return response()->json(['orders' => $request->orderToken], 200);
+        $orders = Order::when($tableSession, function ($q) use ($tableSession) {
+            $q->where('table_session_token', $tableSession->session_token);
+        })
+            ->select('id', 'order_code', 'order_type', 'total_price', 'total_qty', 'status', 'created_at')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json(['orders' => $orders], 200);
+        // return response()->json(['orderToken' => $request->orders, 'tableSessionToken' => $request->tableSessionToken], 200);
     }
 
 
@@ -76,6 +83,9 @@ class OrderController extends Controller
             // creating order items
             foreach ($request->items as $itemData) {
                 $menu = Menu::find($itemData['menu_id']);
+                if (!$menu->is_available) {
+                    return response()->json(['error' => $menu->eng_name . ' is not available'], 422);
+                }
                 $itemPrice = $menu->price;
                 $itemTotalPrice = $itemPrice * $itemData['quantity'];
 
@@ -167,7 +177,7 @@ class OrderController extends Controller
 
             DB::commit();
 
-            return response()->json(['order_token' => $orderToken], 201);
+            return response()->json(['message' => 'success'], 201);
         } catch (\Exception $e) {
             logger($e->getMessage());
             DB::rollBack();

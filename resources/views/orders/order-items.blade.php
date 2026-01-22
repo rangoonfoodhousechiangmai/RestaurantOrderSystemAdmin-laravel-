@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app', ['elementActive' => 'orders'])
 
 @section('content')
     <div class="row">

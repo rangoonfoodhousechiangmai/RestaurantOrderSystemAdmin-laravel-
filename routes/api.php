@@ -26,4 +26,4 @@ Route::post('/tables/verify', [\App\Http\Controllers\Api\TableController::class,
 
 // orders
 Route::post('/orders', [App\Http\Controllers\Api\OrderController::class, 'store']);
-Route::get('/orders/history', [App\Http\Controllers\Api\OrderController::class, 'getOrderHistory']);
+Route::post('/orders/history', [App\Http\Controllers\Api\OrderController::class, 'getOrderHistory']);

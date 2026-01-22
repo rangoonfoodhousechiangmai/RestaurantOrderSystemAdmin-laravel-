@@ -193,28 +193,28 @@
                     $('#edit_name').val(data.name);
                     $('#edit_type').val(data.type).trigger('change');
                     $('#edit_selection_type').val(data.selection_type).trigger('change');
-                    $('#edit_price').val(data.price || '');
-                    if (data.type === 'addon') {
-                        $('#edit_price').prop('disabled', false);
-                        $('#edit_price').prop('required', true);
-                        $('#edit_price_div').show();
-                    } else {
-                        $('#edit_price').prop('disabled', true);
-                        $('#edit_price_div').hide();
-                    }
+                    $('#edit_price').val(data.price || 0);
+                    // if (data.type === 'addon') {
+                    //     $('#edit_price').prop('disabled', false);
+                    //     $('#edit_price').prop('required', true);
+                    //     $('#edit_price_div').show();
+                    // } else {
+                    //     $('#edit_price').prop('disabled', true);
+                    //     $('#edit_price_div').hide();
+                    // }
 
-                    $('#edit_type').on('change', function() {
-                        if ($('#edit_type').val() === 'addon') {
-                            $('#edit_price').prop('disabled', false);
-                            $('#edit_price').prop('required', true);
-                            $('#edit_price_div').show();
-                        } else {
+                    // $('#edit_type').on('change', function() {
+                    //     if ($('#edit_type').val() === 'addon') {
+                    //         $('#edit_price').prop('disabled', false);
+                    //         $('#edit_price').prop('required', true);
+                    //         $('#edit_price_div').show();
+                    //     } else {
 
-                            $('#edit_price').prop('disabled', true);
-                            $('#edit_price_div').hide();
+                    //         $('#edit_price').prop('disabled', true);
+                    //         $('#edit_price_div').hide();
 
-                        }
-                    })
+                    //     }
+                    // })
 
 
                 },
@@ -225,19 +225,19 @@
         }
 
         $(document).ready(function() {
-            $('#price_div').hide();
-            $('#type').on('change', function() {
-                if ($('#type').val() === 'addon') {
-                    $('#price').prop('disabled', false);
-                    $('#price').prop('required', true);
-                    $('#price_div').show();
-                } else {
-                    $('')
-                    $('#price').prop('disabled', true);
-                    $('#price_div').hide();
+            // $('#price_div').hide();
+            // $('#type').on('change', function() {
+            //     if ($('#type').val() === 'addon') {
+            //         $('#price').prop('disabled', false);
+            //         $('#price').prop('required', true);
+            //         $('#price_div').show();
+            //     } else {
+            //         $('')
+            //         $('#price').prop('disabled', true);
+            //         $('#price_div').hide();
 
-                }
-            })
+            //     }
+            // })
 
 
             // Clear create modal form when closed
