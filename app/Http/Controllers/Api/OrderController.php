@@ -29,9 +29,29 @@ class OrderController extends Controller
         $orders = Order::when($tableSession, function ($q) use ($tableSession) {
             $q->where('table_session_token', $tableSession->session_token);
         })
-            ->select('id', 'order_code', 'order_type', 'total_price', 'total_qty', 'status', 'created_at')
+            ->with('table:id,slug')
+            ->select(
+                'id',
+                'table_id', // REQUIRED for with()
+                'order_code',
+                'order_type',
+                'total_price',
+                'total_qty',
+                'status',
+                'created_at'
+            )
             ->orderBy('created_at', 'desc')
             ->get();
+
+
+
+        // $orders = Order::when($tableSession, function ($q) use ($tableSession) {
+        //     $q->where('table_session_token', $tableSession->session_token);
+        // })
+        //     ->leftJoin('tables', 'tables.id', '=', 'orders.table_id')
+        //     ->select('orders.id', 'table_id', 'tables.slug as table_slug', 'order_code', 'order_type', 'total_price', 'total_qty', 'status', 'orders.created_at')
+        //     ->orderBy('created_at', 'desc')
+        //     ->get();
 
         return response()->json(['orders' => $orders], 200);
         // return response()->json(['orderToken' => $request->orders, 'tableSessionToken' => $request->tableSessionToken], 200);
