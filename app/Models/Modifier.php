@@ -11,7 +11,8 @@ class Modifier extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'name',
+        'eng_name',
+        'mm_name',
         'type',
         'price',
         'selection_type',
@@ -20,7 +21,7 @@ class Modifier extends Model
     public function scopeFilter($query)
     {
         if (request('searchName')) {
-            $query->where('name', 'like', '%' . request('searchName') . '%');
+            $query->where('eng_name', 'like', '%' . request('searchName') . '%');
         }
 
         return $query;

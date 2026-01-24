@@ -43,7 +43,6 @@
                             </thead>
                             <tbody>
                                 @forelse($order->orderItems as $item)
-
                                     <tr data-item-id="{{ $item->id }}">
                                         <td>{{ $item->menu->eng_name }}</td>
                                         <td>
@@ -66,7 +65,7 @@
                                                         @foreach ($proteinModifiers as $modifier)
                                                             <option value="{{ $modifier->id }}"
                                                                 {{ $item->orderItemModifiers->where('modifier_id', $modifier->id)->isNotEmpty() ? 'selected' : '' }}>
-                                                                {{ $modifier->name }}
+                                                                {{ $modifier->eng_name }} / {{ $modifier->mm_name }}
                                                                 (+{{ number_format($modifier->price, 2) }} THB)
                                                             </option>
                                                         @endforeach
@@ -82,7 +81,7 @@
                                                         @foreach ($flavorModifiers as $modifier)
                                                             <option value="{{ $modifier->id }}"
                                                                 {{ $item->orderItemModifiers->where('modifier_id', $modifier->id)->isNotEmpty() ? 'selected' : '' }}>
-                                                                {{ $modifier->name }}
+                                                                {{ $modifier->eng_name }} / {{ $modifier->mm_name }}
                                                                 (+{{ number_format($modifier->price, 2) }} THB)
                                                             </option>
                                                         @endforeach
@@ -101,7 +100,7 @@
                                                                 {{ $item->orderItemModifiers->where('modifier_id', $modifier->id)->isNotEmpty() ? 'checked' : '' }}>
                                                             <label class="form-check-label"
                                                                 for="addon-{{ $modifier->id }}-{{ $item->id }}">
-                                                                {{ $modifier->name }}
+                                                                {{ $modifier->eng_name }} / {{ $modifier->mm_name }}
                                                                 (+{{ number_format($modifier->price, 2) }} THB)
                                                             </label>
                                                         </div>
@@ -114,6 +113,8 @@
                                         <td>
                                             <button class="btn btn-primary btn-sm update-item"
                                                 data-item-id="{{ $item->id }}">Update</button>
+                                            <button class="btn btn-danger btn-sm delete-item ms-2"
+                                                data-item-id="{{ $item->id }}">Delete</button>
                                         </td>
                                     </tr>
                                 @empty
@@ -166,6 +167,35 @@
                         alert('Error updating item: ' + xhr.responseJSON.error);
                     }
                 });
+            });
+
+            $('.delete-item').on('click', function() {
+                var row = $(this).closest('tr');
+                var itemId = row.data('item-id');
+
+                if (confirm('Are you sure you want to delete this item?')) {
+                    var url =
+                        "{{ route('orders.deleteItem', ['order' => $order->id, 'itemId' => ':itemId']) }}"
+                        .replace(':itemId', itemId);
+
+                    $.ajax({
+                        url: url,
+                        method: 'DELETE',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            // Update the overall total
+                            $('#total-price').text(response.order_total);
+                            // Remove the row from the table
+                            row.remove();
+                            // alert('Item deleted successfully!');
+                        },
+                        error: function(xhr) {
+                            alert('Error deleting item: ' + xhr.responseJSON.error);
+                        }
+                    });
+                }
             });
         });
     </script>

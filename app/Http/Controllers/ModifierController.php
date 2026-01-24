@@ -23,7 +23,8 @@ class ModifierController extends Controller
     public function store(ModifierStoreRequest $request)
     {
         Modifier::create([
-            'name' => $request->name,
+            'eng_name' => $request->eng_name,
+            'mm_name' => $request->mm_name,
             'type' => $request->type,
             'price' => $request->price,
             'selection_type' => $request->selection_type,

@@ -22,7 +22,8 @@ class ModifierStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255|unique:modifiers,name',
+            'eng_name' => 'required|string|max:255|unique:modifiers,eng_name',
+            'mm_name' => 'required|string|max:255',
             'type' => 'required|in:addon,flavor,protein',
             'price' => 'integer|required',
             'selection_type' => 'required|in:single,multiple',

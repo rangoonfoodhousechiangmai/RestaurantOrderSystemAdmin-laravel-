@@ -36,7 +36,7 @@
                     @forelse($modifiers as $modifier)
                         <tr>
                             <td>{{ $index }}</td>
-                            <td>{{ $modifier->name }}</td>
+                            <td>{{ $modifier->eng_name }}<br><br>{{ $modifier->mm_name }}</td>
                             <td>{{ ucfirst($modifier->type) }}</td>
                             <td>{{ $modifier->price ?? '-' }}</td>
                             <td>{{ ucfirst($modifier->selection_type) }}</td>
@@ -85,9 +85,14 @@
                     @csrf
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="name" name="name" required>
-                            <div class="invalid-feedback" data-error-for="name"></div>
+                            <label for="eng_name" class="form-label">English Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="eng_name" name="eng_name" required>
+                            <div class="invalid-feedback" data-error-for="eng_name"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="emm_ame" class="form-label">Myanmar Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="mm_name" name="mm_name" required>
+                            <div class="invalid-feedback" data-error-for="mm_name"></div>
                         </div>
                         <div class="mb-3">
                             <label for="type" class="form-label">Modifier Type <span class="text-danger">*</span></label>
@@ -138,9 +143,14 @@
                     @csrf
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="edit_name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="edit_name" name="edit_name" required>
-                            <div class="invalid-feedback" data-error-for="name"></div>
+                            <label for="edit_eng_name" class="form-label">English Name</label>
+                            <input type="text" class="form-control" id="edit_eng_name" name="edit_eng_name" required>
+                            <div class="invalid-feedback" data-error-for="eng_name"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit_mm_name" class="form-label">Myanmar Name</label>
+                            <input type="text" class="form-control" id="edit_mm_name" name="edit_mm_name" required>
+                            <div class="invalid-feedback" data-error-for="mm_name"></div>
                         </div>
                         <div class="mb-3">
                             <label for="edit_type" class="form-label">Modifier Type</label>
@@ -190,7 +200,8 @@
                 success: function(data) {
                     const form = document.getElementById('editModifierForm');
                     form.action = '{{ route('modifiers.update', ':id') }}'.replace(':id', id);
-                    $('#edit_name').val(data.name);
+                    $('#edit_eng_name').val(data.eng_name);
+                    $('#edit_mm_name').val(data.mm_name);
                     $('#edit_type').val(data.type).trigger('change');
                     $('#edit_selection_type').val(data.selection_type).trigger('change');
                     $('#edit_price').val(data.price || 0);

@@ -141,7 +141,8 @@ class OrderController extends Controller
                         OrderItemModifier::create([
                             'order_item_id' => $orderItem->id,
                             'modifier_id' => $addonId,
-                            'name' => $modifier->name,
+                            'eng_name' => $modifier->eng_name,
+                            'mm_name' => $modifier->mm_name,
                             'price' => $modifierPrice,
                         ]);
 
@@ -163,7 +164,8 @@ class OrderController extends Controller
                         OrderItemModifier::create([
                             'order_item_id' => $orderItem->id,
                             'modifier_id' => $proteinModifier->id,
-                            'name' => $proteinModifier->name,
+                            'eng_name' => $proteinModifier->eng_name,
+                            'mm_name' => $proteinModifier->mm_name,
                             'price' => $proteinModifier->price,
                         ]);
                         $proteinPrice = $proteinModifier->price;
@@ -176,7 +178,8 @@ class OrderController extends Controller
                         OrderItemModifier::create([
                             'order_item_id' => $orderItem->id,
                             'modifier_id' => $flavorModifier->id,
-                            'name' => $flavorModifier->name,
+                            'eng_name' => $flavorModifier->eng_name,
+                            'mm_name' => $flavorModifier->mm_name,
                             'price' => $flavorModifier->price,
                         ]);
                         $flavorPrice = $flavorModifier->price;
@@ -213,7 +216,7 @@ class OrderController extends Controller
         $tableSession = TableSession::where('session_token', $session_token)
             ->where('expires_at', '>', now())
             ->first();
-        logger('tableSession', ['tableSession' => $tableSession]);
+
         if (!$tableSession) {
             throw new \Exception('Scan the Qr code plz.');
         }

@@ -26,7 +26,7 @@
                         @endphp
                         @foreach ($menu->modifiers as $modifier)
                             <div class="col-6 col-lg-3">
-                                {{ $index }}.{{ $modifier->name }}
+                                {{ $index }}.{{ $modifier->eng_name }} / {{ $modifier->mm_name }}
                                 @if (!is_null($modifier->pivot->price))
                                     ({{ $modifier->pivot->price }} )
                                 @endif
@@ -49,7 +49,7 @@
                                                 data-type="{{ $modifier->type }}" id="modifier_{{ $modifier->id }}"
                                                 @checked(in_array($modifier->id, $selectedModifierIds))>
                                             <label class="form-check-label" for="modifier_{{ $modifier->id }}">
-                                                {{ $modifier->name }}
+                                                {{ $modifier->eng_name }} / {{ $modifier->mm_name }}
                                             </label>
                                         </div>
 

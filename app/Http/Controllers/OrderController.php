@@ -57,6 +57,7 @@ class OrderController extends Controller
             }
             $menu = $orderItem->menu;
 
+            // dd($request->quantity);
 
             // Update quantity
             $orderItem->quantity = $request->quantity;
@@ -78,7 +79,8 @@ class OrderController extends Controller
                 OrderItemModifier::create([
                     'order_item_id' => $orderItem->id,
                     'modifier_id' => $proteinModifier->id,
-                    'name' => $proteinModifier->name,
+                    'eng_name' => $proteinModifier->eng_name,
+                    'mm_name' => $proteinModifier->mm_name,
                     'price' => $proteinModifier->price,
                 ]);
                 $modifierPrice += $proteinModifier->price;
@@ -89,7 +91,8 @@ class OrderController extends Controller
                 OrderItemModifier::create([
                     'order_item_id' => $orderItem->id,
                     'modifier_id' => $flavorModifier->id,
-                    'name' => $flavorModifier->name,
+                    'eng_name' => $flavorModifier->eng_name,
+                    'mm_name' => $flavorModifier->mm_name,
                     'price' => $flavorModifier->price,
                 ]);
                 $modifierPrice += $flavorModifier->price;
@@ -101,7 +104,8 @@ class OrderController extends Controller
                     OrderItemModifier::create([
                         'order_item_id' => $orderItem->id,
                         'modifier_id' => $addonModifier->id,
-                        'name' => $addonModifier->name,
+                        'eng_name' => $addonModifier->eng_name,
+                        'mm_name' => $addonModifier->mm_name,
                         'price' => $addonModifier->price,
                     ]);
                     $modifierPrice += $addonModifier->price;
@@ -122,6 +126,38 @@ class OrderController extends Controller
             return response()->json([
                 'item_total' => number_format($itemTotalPrice, 2),
                 'order_total' => number_format($order->total_price, 2),
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function deleteOrderItem(Order $order, $itemId)
+    {
+        DB::beginTransaction();
+        try {
+            $orderItem = OrderItem::findOrFail($itemId);
+
+            // Ensure the order item belongs to the specified order
+            if ($orderItem->order->order_code !== $order->order_code) {
+                return response()->json(['error' => 'Unauthorized'], 403);
+            }
+
+            // Delete the order item and its modifiers
+            $orderItem->orderItemModifiers()->delete();
+            $orderItem->delete();
+
+            // Recalculate order totals
+            $order->total_price = $order->orderItems->sum('total_price');
+            $order->total_qty = $order->orderItems->sum('quantity');
+            $order->save();
+
+            DB::commit();
+
+            return response()->json([
+                'order_total' => number_format($order->total_price, 2),
+                'message' => 'Order item deleted successfully.'
             ], 200);
         } catch (\Exception $e) {
             DB::rollBack();

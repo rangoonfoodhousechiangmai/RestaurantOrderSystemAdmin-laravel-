@@ -25,7 +25,7 @@ class MenuUpdateRequest extends FormRequest
             'edit_category_id' => 'required|exists:categories,id',
             'edit_eng_name' => 'required|string|max:255',
             'edit_mm_name' => 'required|string|max:255',
-            'edit_price' => 'nullable|integer|min:0',
+            'edit_price' => 'required|integer|min:0',
             'edit_eng_description' => 'nullable|string',
             'edit_mm_description' => 'nullable|string',
             'edit_image_path' => 'nullable|image|max:2048', // max 2MB, adjust as per requirements

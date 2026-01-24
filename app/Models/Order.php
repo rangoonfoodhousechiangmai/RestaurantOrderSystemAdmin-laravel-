@@ -27,6 +27,8 @@ class Order extends Model
 
     public function table()
     {
-        return $this->belongsTo(Table::class);
+        return $this->belongsTo(Table::class, 'table_id', 'id');
     }
+
+
 }

@@ -24,7 +24,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('modifiers', function (Blueprint $table) {
-            $table->enum('type', ['avoid', 'addon', 'flavor']);
+            $table->enum('type', ['avoid', 'addon', 'flavor'])->change();
         });
     }
 };

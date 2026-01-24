@@ -25,7 +25,7 @@ class MenuStoreRequest extends FormRequest
             'category_id' => 'required|exists:categories,id',
             'eng_name' => 'required|string|max:255',
             'mm_name' => 'required|string|max:255',
-            'price' => 'nullable|integer|min:0',
+            'price' => 'required|integer|min:0',
             'eng_description' => 'nullable|string',
             'mm_description' => 'nullable|string',
             'image_path' => 'nullable|image|max:2048', // max 2MB, adjust as per requirements
