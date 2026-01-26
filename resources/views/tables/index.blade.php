@@ -51,7 +51,7 @@
                                     data-bs-target="#editTableModal" onclick="editTable({{ $table->id }})">
                                     <i class="far fa-edit"></i>
                                 </button>
-                                {{-- <form action="{{ route('tables.destroy', $table->id) }}" method="POST"
+                                <form action="{{ route('tables.destroy', $table->id) }}" method="POST"
                                     style="display:inline;">
                                     @csrf
                                     @method('DELETE')
@@ -59,7 +59,7 @@
                                         onclick="return confirm('Are you sure you want to delete this table?')">
                                         <i class="fa-solid fa-trash-can"></i>
                                     </button>
-                                </form> --}}
+                                </form>
                             </td>
                         </tr>
                         {{-- @php $index++; @endphp --}}

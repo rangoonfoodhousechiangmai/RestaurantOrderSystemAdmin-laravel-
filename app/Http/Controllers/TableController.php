@@ -55,16 +55,16 @@ class TableController extends Controller
         return response()->json(['redirectUrl' => route('tables.index')]);
     }
 
-    // public function destroy(Table $table)
-    // {
-    //     if ($table->qr_code_path && Storage::disk('public')->exists($table->qr_code_path)) {
-    //         Storage::disk('public')->delete($table->qr_code_path);
-    //     }
+    public function destroy(Table $table)
+    {
+        if ($table->qr_code_path && Storage::disk('public')->exists($table->qr_code_path)) {
+            Storage::disk('public')->delete($table->qr_code_path);
+        }
 
-    //     $table->delete();
+        $table->delete();
 
-    //     return response()->json(['message' => 'Table deleted successfully']);
-    // }
+        return response()->json(['message' => 'Table deleted successfully']);
+    }
 
 
     public function reGenerateQr(Table $table)

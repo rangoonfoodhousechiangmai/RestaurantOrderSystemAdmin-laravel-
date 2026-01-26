@@ -38,6 +38,7 @@
                                     <th>Modifiers</th>
                                     <th>Price</th>
                                     <th>Total</th>
+                                    <th>SpecialRequest</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -110,12 +111,14 @@
                                         </td>
                                         <td>{{ number_format($item->price, 2) }} THB</td>
                                         <td class="item-total">{{ number_format($item->total_price, 2) }} THB</td>
+                                        <td>{{ $item->special_request }}</td>
                                         <td>
                                             <button class="btn btn-primary btn-sm update-item"
                                                 data-item-id="{{ $item->id }}">Update</button>
                                             <button class="btn btn-danger btn-sm delete-item ms-2"
                                                 data-item-id="{{ $item->id }}">Delete</button>
                                         </td>
+                                        
                                     </tr>
                                 @empty
                                     <tr>

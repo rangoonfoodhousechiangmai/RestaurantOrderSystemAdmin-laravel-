@@ -13,6 +13,7 @@ class Order extends Model
         'order_code',
         'order_token',
         'table_id',
+        'table_name',
         'table_session_token',
         'order_type',
         'total_price',

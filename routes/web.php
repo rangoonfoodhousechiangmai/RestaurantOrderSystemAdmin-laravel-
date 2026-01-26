@@ -68,7 +68,7 @@ Route::middleware([
     Route::post('/tables', [TableController::class, 'store'])->name('tables.store');
     Route::get('/tables/{table}', [TableController::class, 'show'])->name('tables.show');
     Route::post('/tables/{table}', [TableController::class, 'update'])->name('tables.update');
-    // Route::delete('/tables/{table}', [TableController::class, 'destroy'])->name('tables.destroy');
+    Route::delete('/tables/{table}', [TableController::class, 'destroy'])->name('tables.destroy');
     // Route::post('/tables/{table}/generate-qr', [TableController::class, 'generateQr'])->name('tables.generate-qr');
 
 

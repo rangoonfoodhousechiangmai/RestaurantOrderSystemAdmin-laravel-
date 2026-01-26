@@ -29,10 +29,11 @@ class OrderController extends Controller
         $orders = Order::when($tableSession, function ($q) use ($tableSession) {
             $q->where('table_session_token', $tableSession->session_token);
         })
-            ->with('table:id,slug')
+            ->with(['table:id,slug', 'orderItems.menu', 'orderItems.orderItemModifiers'])
             ->select(
                 'id',
                 'table_id', // REQUIRED for with()
+                'table_name',
                 'order_code',
                 'order_type',
                 'total_price',
@@ -82,6 +83,13 @@ class OrderController extends Controller
         try {
 
             $tableSession = $this->validateTableSession($request->table_session_token);
+
+            dd($tableSession);
+            $table = Table::find($tableSession->table_id);
+            if (!$table) {
+                return response()->json(['error' => 'Table was deleted. Qr Scan Again'], 500);
+            }
+
             $orderCode = Helper::generateOrderCode();
             $orderToken = Helper::generateOrderToken();
 
@@ -90,6 +98,7 @@ class OrderController extends Controller
                 'order_code' => $orderCode,
                 'order_token' => $orderToken,
                 'table_id' => $tableSession->table_id,
+                'table_name' => $tableSession->table->slug,
                 'table_session_token' => $tableSession->session_token,
                 'order_type' => $request->order_type,
                 'total_price' => 0,
