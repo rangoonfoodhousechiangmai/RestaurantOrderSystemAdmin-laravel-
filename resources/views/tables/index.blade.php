@@ -91,7 +91,7 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="table_number" class="form-label">Table Number <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="table_number" name="table_number">
+                            <input type="number" class="form-control" id="table_number" name="table_number">
                             <div class="invalid-feedback" data-error-for="table_number"></div>
                         </div>
                     </div>
@@ -118,7 +118,7 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="edit_table_number" class="form-label">Table Number</label>
-                            <input type="text" class="form-control" id="edit_table_number" name="table_number">
+                            <input type="number" class="form-control" id="edit_table_number" name="table_number">
                             <div class="invalid-feedback" data-error-for="table_number"></div>
                         </div>
                         <div class="mb-3">

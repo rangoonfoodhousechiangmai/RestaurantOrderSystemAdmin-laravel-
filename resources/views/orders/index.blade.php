@@ -57,7 +57,7 @@
                                                 <td><a
                                                         href="{{ route('orders.show', $order) }}">{{ $order->order_code }}</a>
                                                 </td>
-                                                <td>{{ $order->table->slug ?? 'N/A' }}</td>
+                                                <td>{{ $order->table->slug ?? $order->table_name ?? 'N/A' }}</td>
                                                 <td>{{ ucfirst($order->order_type) }}</td>
                                                 <td>{{ number_format($order->total_price, 2) }} THB</td>
                                                 <td>{{ $order->total_qty }}</td>

@@ -29,6 +29,7 @@ class TableQrService
     public function generateQrCode(Table $table): void
     {
         $url = $this->generateTableUrl($table);
+        // dd($url);
 
         // Use SVG backend (no imagick required)
         $renderer = new ImageRenderer(
@@ -42,7 +43,7 @@ class TableQrService
         $qrSvg = $writer->writeString($url);
 
         $directory = 'qr-codes/tables';
-        $filename = "table-{$table->table_number}-{$table->qr_token}.svg";
+        $filename = Str::random(10) . '.svg';
         $path = "{$directory}/{$filename}";
 
         if (!Storage::disk('public')->exists($directory)) {

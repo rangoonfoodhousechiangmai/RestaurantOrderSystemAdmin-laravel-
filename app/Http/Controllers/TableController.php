@@ -6,13 +6,12 @@ use App\Models\Table;
 use App\Services\TableQrService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
+
 
 class TableController extends Controller
 {
-    public function __construct(protected TableQrService $tableQrService)
-    {
-
-    }
+    public function __construct(protected TableQrService $tableQrService) {}
     public function index()
     {
         $tables = Table::paginate(10);
@@ -23,7 +22,11 @@ class TableController extends Controller
     {
         // dd($request->all());
         $request->validate([
-            'table_number' => 'required|string|unique:tables,table_number',
+            'table_number' => [
+                'required',
+                'string',
+                Rule::unique('tables', 'table_number')->whereNull('deleted_at'),
+            ],
         ]);
 
         try {
@@ -47,7 +50,11 @@ class TableController extends Controller
     public function update(Request $request, Table $table)
     {
         $request->validate([
-            'table_number' => 'required|string|unique:tables,table_number,' . $table->id,
+            'table_number' => [
+                'required',
+                'string',
+                Rule::unique('tables', 'table_number')->whereNull('deleted_at'),
+            ],
         ]);
 
         $table->update($request->only('table_number'));
@@ -62,8 +69,7 @@ class TableController extends Controller
         }
 
         $table->delete();
-
-        return response()->json(['message' => 'Table deleted successfully']);
+        return redirect()->route('tables.index')->with('success', 'Table deleted successfully');
     }
 
 
