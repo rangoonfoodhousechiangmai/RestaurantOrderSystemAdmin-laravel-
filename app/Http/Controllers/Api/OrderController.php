@@ -62,6 +62,7 @@ class OrderController extends Controller
 
     public function store(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'table_session_token' => 'nullable|string',
             'order_type' => 'required|in:dine_in,take_away',
@@ -84,7 +85,6 @@ class OrderController extends Controller
 
             $tableSession = $this->validateTableSession($request->table_session_token);
 
-            dd($tableSession);
             $table = Table::find($tableSession->table_id);
             if (!$table) {
                 return response()->json(['error' => 'Table was deleted. Qr Scan Again'], 500);
