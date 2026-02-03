@@ -179,4 +179,47 @@ class OrderController extends Controller
 
         return response()->json(['message' => 'Order status updated successfully.'], 200);
     }
+
+    public function updatePaymentVerification(Request $request, Order $order)
+    {
+        // dd(gettype($request->payment_verified));
+        $validator = Validator::make($request->all(), [
+            'payment_verified' => 'required|in:true,false',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $payment_verified = $request->payment_verified === 'true' ? true : false;
+
+        if ($payment_verified) {
+            $order->update([
+                'payment_verified_at' => now(),
+                'payment_verified_by' => auth()->id(),
+            ]);
+        } else {
+            $order->update([
+                'payment_verified_at' => null,
+                'payment_verified_by' => null,
+            ]);
+        }
+
+        return response()->json(['message' => 'Payment verification updated successfully.'], 200);
+    }
+
+    public function showPaymentImage(Order $order)
+    {
+        if (!$order->payment_image_path) {
+            abort(404, 'Payment image not found.');
+        }
+
+        $path = storage_path('app/' . $order->payment_image_path);
+
+        if (!file_exists($path)) {
+            abort(404, 'Payment image not found.');
+        }
+
+        return response()->file($path);
+    }
 }

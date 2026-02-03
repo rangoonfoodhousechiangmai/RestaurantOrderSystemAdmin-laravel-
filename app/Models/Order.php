@@ -37,4 +37,15 @@ class Order extends Model
     }
 
 
+    public function isPaid(): bool
+    {
+        return (bool) $this->payment_status;
+    }
+
+
+    public function isPaymentVerified(): bool
+    {
+        return !is_null($this->payment_verified_at);
+    }
+
 }
