@@ -53,7 +53,7 @@ class TableController extends Controller
             'table_number' => [
                 'required',
                 'string',
-                Rule::unique('tables', 'table_number')->whereNull('deleted_at'),
+                Rule::unique('tables', 'table_number')->whereNull('deleted_at')->ignore($table->id, 'id'),
             ],
         ]);
 
