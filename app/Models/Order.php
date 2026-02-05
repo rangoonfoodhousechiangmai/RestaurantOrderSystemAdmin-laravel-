@@ -48,4 +48,39 @@ class Order extends Model
         return !is_null($this->payment_verified_at);
     }
 
+    public function scopeGetToday()
+    {
+        return $this->whereDate('created_at', now()->toDateString());
+    }
+
+    public function scopeFilter($query, $request)
+    {
+        if ($request->has('order_code') && !empty($request->order_code)) {
+            $query->where('order_code', 'like', '%' . $request->order_code . '%');
+        }
+
+        if ($request->has('table_slug') && !empty($request->table_slug)) {
+            $query->whereHas('table', function ($q) use ($request) {
+                $q->where('slug', $request->table_slug);
+            });
+        }
+
+        if ($request->has('order_type') && !empty($request->order_type)) {
+            $query->where('order_type', $request->order_type);
+        }
+
+        if ($request->has('status') && !empty($request->status)) {
+            $query->whereIn('status', $request->status == 'all' ? ['pending', 'preparing', 'delivered', 'completed', 'cancelled'] : [$request->status]);
+        }
+
+        // if ($request->has('date_from') && !empty($request->date_from)) {
+        //     $query->whereDate('created_at', '>=', $request->date_from);
+        // }
+
+        // if ($request->has('date_to') && !empty($request->date_to)) {
+        //     $query->whereDate('created_at', '<=', $request->date_to);
+        // }
+
+        return $query;
+    }
 }

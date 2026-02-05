@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Table;
 use App\Models\Modifier;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
@@ -17,13 +18,15 @@ class OrderController extends Controller
         $status = request('status');
 
         $orders = Order::with('table')
-            ->when($status, function ($query) use ($status) {
-                return $query->where('status', $status);
-            })
-            ->orderBy('created_at', 'desc')
+            ->filter(request())
+            ->whereDate('created_at', now()->toDateString())
             ->get();
+        // dd($orders);
 
-        return view('orders.index', compact('orders', 'status'));
+
+        $tables = Table::whereNull('deleted_at')->get();
+
+        return view('orders.index', compact('orders', 'status', 'tables'));
     }
 
     public function show(Order $order)

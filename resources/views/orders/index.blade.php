@@ -26,34 +26,38 @@
 @endpush
 @section('content')
     <div class="card">
-        <div class="card-header">
-            <h4 class="card-title">Orders</h4>
+        <div class="card-header my-3">
+            <h2 class="text-center">Orders</h2>
         </div>
+        @include('filters.order-filter')
         {{-- <div class="card-body"> --}}
         <!-- Tabs -->
-        <ul class="nav nav-tabs" id="orderTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <a class="nav-link {{ !$status ? 'active' : '' }}" href="{{ route('orders.index') }}">All</a>
+        <ul class="nav nav-tabs mt-2" id="orderTabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link {{ !$status ? 'active' : '' }}"
+                    href="?status=&order_code={{ request('order_code') }}&table_slug={{ request('table_slug') }}&order_type={{ request('order_type') }}">All</a>
             </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link {{ $status == 'pending' ? 'active' : '' }}"
-                    href="{{ route('orders.index', ['status' => 'pending']) }}">Pending</a>
+            <li class="nav-item">
+                <a class="nav-link {{ request('status') == 'pending' ? 'active' : '' }}"
+                    href="?status=pending&order_code={{ request('order_code') }}&table_slug={{ request('table_slug') }}&order_type={{ request('order_type') }}">
+                    Pending
+                </a>
             </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link {{ $status == 'preparing' ? 'active' : '' }}"
-                    href="{{ route('orders.index', ['status' => 'preparing']) }}">Preparing</a>
+            <li class="nav-item">
+                <a class="nav-link {{ request('status') == 'preparing' ? 'active' : '' }}"
+                    href="?status=preparing&order_code={{ request('order_code') }}&table_slug={{ request('table_slug') }}&order_type={{ request('order_type') }}">Preparing</a>
             </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link {{ $status == 'delivered' ? 'active' : '' }}"
-                    href="{{ route('orders.index', ['status' => 'delivered']) }}">Delivered</a>
+            <li class="nav-item">
+                <a class="nav-link {{ request('status') == 'delivered' ? 'active' : '' }}"
+                    href="?status=delivered&order_code={{ request('order_code') }}&table_slug={{ request('table_slug') }}&order_type={{ request('order_type') }}">Delivered</a>
             </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link {{ $status == 'completed' ? 'active' : '' }}"
-                    href="{{ route('orders.index', ['status' => 'completed']) }}">Completed</a>
+            <li class="nav-item">
+                <a class="nav-link {{ request('status') == 'completed' ? 'active' : '' }}"
+                    href="?status=completed&order_code={{ request('order_code') }}&table_slug={{ request('table_slug') }}&order_type={{ request('order_type') }}">Completed</a>
             </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link {{ $status == 'cancelled' ? 'active' : '' }}"
-                    href="{{ route('orders.index', ['status' => 'cancelled']) }}">Cancelled</a>
+            <li class="nav-item">
+                <a class="nav-link {{ request('status') == 'cancelled' ? 'active' : '' }}"
+                    href="?status=cancelled&order_code={{ request('order_code') }}&table_slug={{ request('table_slug') }}&order_type={{ request('order_type') }}">Cancelled</a>
             </li>
         </ul>
 
@@ -64,6 +68,7 @@
                 <thead class="table-dark" style="top: 0;">
                     <tr>
                         <th>OrderCode</th>
+                        <th>OrderTime</th>
                         <th>Table</th>
                         <th>OrderType</th>
                         <th>TotalPrice</th>
@@ -71,13 +76,13 @@
                         <th>OrderStatus</th>
                         <th>PaymentImage</th>
                         <th>PaymentVerify</th>
-                        <th>CreatedAt</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($orders as $order)
                         <tr>
                             <td><a href="{{ route('orders.show', $order) }}">{{ $order->order_code }}</a></td>
+                            <td>{{ $order->created_at->format('Y-m-d H:i') }}</td>
                             <td>{{ $order->table->slug ?? ($order->table_name ?? 'N/A') }}</td>
                             <td>{{ ucfirst($order->order_type) }}</td>
                             <td>{{ number_format($order->total_price, 2) }} THB</td>
@@ -103,7 +108,8 @@
                             </td>
                             <td>
                                 @if ($order->payment_image_path)
-                                    <a href="{{ route('orders.payment-image', $order) }}" class="text-decoration-underline" target="_blank">Check
+                                    <a href="{{ route('orders.payment-image', $order) }}" class="text-decoration-underline"
+                                        target="_blank">Check
                                         Payment</a>
                                 @else
                                     -
@@ -122,7 +128,7 @@
                                     -
                                 @endif
                             </td>
-                            <td>{{ $order->created_at->format('Y-m-d H:i') }}</td>
+
                         </tr>
                     @empty
                         <tr>

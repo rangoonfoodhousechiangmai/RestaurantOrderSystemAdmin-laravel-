@@ -73,7 +73,7 @@ class OrderController extends Controller
             'items.*.flavor_id' => 'nullable|integer',
             'items.*.addon_ids' => 'nullable|array',
             'items.*.addon_ids.*' => 'integer|exists:modifiers,id',
-            'items.*.special_request' => 'nullable|string',
+            'items.*.special_request' => 'nullable|string|max:200',
         ]);
 
         if ($validator->fails()) {
