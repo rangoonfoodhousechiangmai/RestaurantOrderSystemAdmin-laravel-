@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ModifierController;
 use App\Http\Controllers\MenuVariantController;
 use App\Http\Controllers\MenuModifierController;
@@ -29,9 +30,8 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('/dashboard/order-items/{period}', [DashboardController::class, 'getData'])->name('dashboard.data');
 
     // categories
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');

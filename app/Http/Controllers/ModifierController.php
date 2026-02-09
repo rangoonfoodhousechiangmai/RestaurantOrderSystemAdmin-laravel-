@@ -38,7 +38,8 @@ class ModifierController extends Controller
     public function update(ModifierUpdateRequest $request, Modifier $modifier)
     {
         $modifier->update([
-            'name' => $request->edit_name,
+            'eng_name' => $request->edit_eng_name,
+            'mm_name' => $request->edit_mm_name,
             'type' => $request->edit_type,
             'price' => $request->edit_price,
             'selection_type' => $request->edit_selection_type,

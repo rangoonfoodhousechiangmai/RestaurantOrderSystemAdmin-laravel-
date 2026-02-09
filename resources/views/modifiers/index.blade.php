@@ -90,7 +90,7 @@
                             <div class="invalid-feedback" data-error-for="eng_name"></div>
                         </div>
                         <div class="mb-3">
-                            <label for="emm_ame" class="form-label">Myanmar Name <span class="text-danger">*</span></label>
+                            <label for="mm_ame" class="form-label">Myanmar Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="mm_name" name="mm_name" required>
                             <div class="invalid-feedback" data-error-for="mm_name"></div>
                         </div>
@@ -145,12 +145,12 @@
                         <div class="mb-3">
                             <label for="edit_eng_name" class="form-label">English Name</label>
                             <input type="text" class="form-control" id="edit_eng_name" name="edit_eng_name" required>
-                            <div class="invalid-feedback" data-error-for="eng_name"></div>
+                            <div class="invalid-feedback" data-error-for="edit_eng_name"></div>
                         </div>
                         <div class="mb-3">
                             <label for="edit_mm_name" class="form-label">Myanmar Name</label>
                             <input type="text" class="form-control" id="edit_mm_name" name="edit_mm_name" required>
-                            <div class="invalid-feedback" data-error-for="mm_name"></div>
+                            <div class="invalid-feedback" data-error-for="edit_mm_name"></div>
                         </div>
                         <div class="mb-3">
                             <label for="edit_type" class="form-label">Modifier Type</label>
