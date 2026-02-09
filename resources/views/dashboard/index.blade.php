@@ -50,17 +50,31 @@
             </div>
         </div>
         <div class="col-md-6 ">
-            <div class="card shadow border-0">
+            <div class="col-12 card shadow border-0">
                 <h2 class="card-header bg-primary text-white">Today's Summary</h2>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-6">
                             <h5>Orders Count</h5>
-                            <p class="display-6">{{ $todayOrderItemCount }}</p>
+                            <p class="display-6">{{ $todayOrderItemCount ?? '-' }}</p>
                         </div>
                         <div class="col-6">
                             <h5>Total Revenue</h5>
-                            <p class="display-6">THB {{ number_format($todayTotalRevenue, 0, '.', ',') }}</p>
+                            <p class="display-6">THB
+                                {{ $todayTotalRevenue ? number_format($todayTotalRevenue, 0, '.', ',') : '-' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <div class="card shadow border-0">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Weekly Order Counts</h5>
+                        </div>
+                        <div class="card-body" style="height: 400px;">
+
+                            {!! $chart->render() !!}
                         </div>
                     </div>
                 </div>

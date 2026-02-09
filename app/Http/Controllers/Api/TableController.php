@@ -53,6 +53,11 @@ class TableController extends Controller
             ->first();
 
         if ($existing) {
+            $existing->update([
+                'has_qr_verified' => true,
+                'qr_verified_at' => now(),
+                'expires_at' => now()->addHours(2)
+            ]);
             return $existing->session_token;
         }
 
