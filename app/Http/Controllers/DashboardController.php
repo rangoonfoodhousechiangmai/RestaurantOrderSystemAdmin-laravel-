@@ -45,7 +45,7 @@ class DashboardController extends Controller
                 $query->where('status', 'completed')
                     ->whereNotNull('payment_verified_at');
             })
-            ->count();
+            ->sum('quantity');
 
         $todayTotalRevenue = Order::whereDate('created_at', Carbon::today())
             ->where('status', 'completed')

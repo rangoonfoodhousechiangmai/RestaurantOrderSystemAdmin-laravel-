@@ -5,7 +5,7 @@
 @section('content')
     <div class="row gap-3">
         <div class="col-12 mt-2">
-            <h1 class="text-center fw-bold">Dashboard</h1>
+            <h2 class="text-center fw-bold">Dashboard</h2>
         </div>
         <div class="col-md-5">
             <div class="card shadow border-0">
@@ -51,17 +51,16 @@
         </div>
         <div class="col-md-6 ">
             <div class="col-12 card shadow border-0">
-                <h2 class="card-header bg-primary text-white">Today's Summary</h2>
+                <h5 class="card-header bg-primary text-white">Today's Summary</h5>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-6">
-                            <h5>Orders Count</h5>
-                            <p class="display-6">{{ $todayOrderItemCount ?? '-' }}</p>
+                    <div class="row flex-column flex-sm-row">
+                        <div class="col-12 col-sm-5">
+                            <h5>OrderItem Count</h5>
+                            <p class="display-5">{{ $todayOrderItemCount ?? 0 }}</p>
                         </div>
-                        <div class="col-6">
+                        <div class="col-12 col-sm-7 mt-3 mt-sm-0">
                             <h5>Total Revenue</h5>
-                            <p class="display-6">THB
-                                {{ $todayTotalRevenue ? number_format($todayTotalRevenue, 0, '.', ',') : '-' }}</p>
+                            <p class="display-5">THB <span class="fw-bolder">{{ $todayTotalRevenue ? number_format($todayTotalRevenue, 0, '.', ',') : '-' }}</span></p>
                         </div>
                     </div>
                 </div>

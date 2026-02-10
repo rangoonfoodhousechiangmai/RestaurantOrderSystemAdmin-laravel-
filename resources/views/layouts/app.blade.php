@@ -48,7 +48,7 @@
     </div>
 
     {{-- navbar --}}
-    <div class="container-fluid page-body-wrapper">
+    <div class="container-fluid page-body-wrapper" style="padding-top:85px;">
         @include('layouts.navbar')
         {{-- sidebar --}}
         @include('layouts.sidebar')
