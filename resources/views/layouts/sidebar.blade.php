@@ -2,19 +2,19 @@
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <ul class="nav">
         <li class="nav-item {{ isset($elementActive) && $elementActive == 'dashboard' ? 'active' : '' }}">
-           <a class="nav-link" href="{{ route('dashboard.index') }}">
-               {{-- <i class="icon-grid menu-icon"></i> --}}
-               <i class="fa-solid fa-dashboard menu-icon"></i>
-               <span class="menu-title">Dashboard</span>
-           </a>
-       </li>
-       <li class="nav-item {{ isset($elementActive) && $elementActive == 'tables' ? 'active' : '' }}">
-           <a class="nav-link" href="{{ route('tables.index') }}">
-               {{-- <i class="icon-grid menu-icon"></i> --}}
-               <i class="fa-solid fa-table menu-icon"></i>
-               <span class="menu-title">Table</span>
-           </a>
-       </li>
+            <a class="nav-link" href="{{ route('dashboard.index') }}">
+                {{-- <i class="icon-grid menu-icon"></i> --}}
+                <i class="fa-solid fa-dashboard menu-icon"></i>
+                <span class="menu-title">Dashboard</span>
+            </a>
+        </li>
+        <li class="nav-item {{ isset($elementActive) && $elementActive == 'tables' ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('tables.index') }}">
+                {{-- <i class="icon-grid menu-icon"></i> --}}
+                <i class="fa-solid fa-table menu-icon"></i>
+                <span class="menu-title">Table</span>
+            </a>
+        </li>
         <li class="nav-item {{ isset($elementActive) && $elementActive == 'categories' ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('categories.index') }}">
                 {{-- <i class="icon-grid menu-icon"></i> --}}
@@ -38,8 +38,7 @@
         </li>
         <li class="nav-item {{ isset($elementActive) && $elementActive == 'orders' ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('orders.index') }}">
-                {{-- <i class="icon-grid menu-icon"></i> --}}
-                <i class="fa-regular fa-newspaper fa-2x menu-icon"></i>
+                <i class="fa-solid fa-chart-bar fa-2x menu-icon"></i>
                 <span class="menu-title">Orders</span>
             </a>
         </li>

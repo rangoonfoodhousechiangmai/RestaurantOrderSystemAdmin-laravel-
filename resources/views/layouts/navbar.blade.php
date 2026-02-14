@@ -1,5 +1,5 @@
 <!-- partial:partials/_navbar.html -->
-<nav class="navbar col-12 fixed-top d-flex flex-row">
+<nav class="navbar col-12 fixed-top d-flex flex-row p-0">
     <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
         <p class="fs-4 text-wrap fw-bolder" style="z-index: 999; color: #E91E63">Rangoon Food House</p>
 
