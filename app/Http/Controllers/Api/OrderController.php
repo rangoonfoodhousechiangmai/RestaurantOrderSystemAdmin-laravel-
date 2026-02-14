@@ -39,6 +39,7 @@ class OrderController extends Controller
                 'total_price',
                 'total_qty',
                 'status',
+                'payment_verified_at',
                 'created_at'
             )
             ->orderBy('created_at', 'desc')

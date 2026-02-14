@@ -1,7 +1,8 @@
 <!-- partial:partials/_navbar.html -->
-<nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+<nav class="navbar col-12 fixed-top d-flex flex-row">
     <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
-        <span class="fs-3 text-nowrap fw-bolder" style="z-index: 999; color: #E91E63">Logo</span>
+        <p class="fs-4 text-wrap fw-bolder" style="z-index: 999; color: #E91E63">Rangoon Food House</p>
+
     </div>
     <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
         <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">

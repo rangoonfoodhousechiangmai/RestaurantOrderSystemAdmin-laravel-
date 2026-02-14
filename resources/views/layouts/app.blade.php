@@ -48,7 +48,7 @@
     </div>
 
     {{-- navbar --}}
-    <div class="container-fluid page-body-wrapper">
+    <div class="container-fluid page-body-wrapper" style="padding-top:85px;">
         @include('layouts.navbar')
         {{-- sidebar --}}
         @include('layouts.sidebar')
@@ -103,9 +103,14 @@
     <script src="{{ asset('src/assets/js/flatpickr-month-year.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pusher/7.0.3/pusher.min.js"></script>
 
+    {{-- Chart.js --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     {{-- toast message --}}
 
     <script src="{{ asset('js/custom.js') }}"></script>
+
+
+
     @stack('js')
 
 

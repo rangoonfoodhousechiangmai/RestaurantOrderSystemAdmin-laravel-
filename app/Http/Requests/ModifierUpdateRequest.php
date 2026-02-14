@@ -24,7 +24,8 @@ class ModifierUpdateRequest extends FormRequest
         $modifierId = $this->route('modifier')->id;
 
         return [
-            'edit_name' => 'required|string|max:255|unique:modifiers,name,' . $modifierId,
+            'edit_eng_name' => 'required|string|max:255|unique:modifiers,eng_name,' . $modifierId,
+            'edit_mm_name' => 'required|string|max:255|unique:modifiers,mm_name,' . $modifierId,
             'edit_type' => 'required|in:avoid,addon,flavor,protein',
             'edit_price' => 'nullable|integer|required_if:edit_type,addon|min:0',
             'edit_selection_type' => 'required|in:single,multiple',

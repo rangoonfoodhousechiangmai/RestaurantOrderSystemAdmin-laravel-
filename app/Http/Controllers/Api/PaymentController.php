@@ -44,8 +44,13 @@ class PaymentController extends Controller
             }
 
             // Check if payment already exists
-            if ($order->payment_status) {
-                return response()->json(['error' => 'Payment already exists for this order'], 400);
+            // if ($order->payment_status) {
+            //     return response()->json(['error' => 'Payment already exists for this order'], 400);
+            // }
+
+            // Delete existing payment image if it exists
+            if ($order->payment_image_path) {
+                $this->fileService->deleteImagePrivate($order->payment_image_path);
             }
 
             // Store the payment image with custom path: payments/{date}/{order_code}
@@ -72,4 +77,3 @@ class PaymentController extends Controller
         }
     }
 }
-
