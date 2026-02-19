@@ -211,6 +211,63 @@ class OrderController extends Controller
         return response()->json(['message' => 'Payment verification updated successfully.'], 200);
     }
 
+    public function updatePaymentType(Request $request, Order $order)
+    {
+        $validator = Validator::make($request->all(), [
+            'payment_type' => 'nullable|in:cash,online',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $paymentType = $request->payment_type ?: null;
+
+        // If switching to cash or clearing payment type, remove any uploaded payment image
+        if ($paymentType === 'cash') {
+            if ($order->payment_image_path) {
+                $path = storage_path('app/' . $order->payment_image_path);
+                if (file_exists($path)) {
+                    @unlink($path);
+                }
+            }
+
+            $order->update([
+                'payment_type' => $paymentType,
+                'payment_status' => true,
+                'payment_image_path' => null,
+            ]);
+        } elseif ($paymentType === null) {
+            // If clearing payment type, also clear payment image and verification
+            if ($order->payment_image_path) {
+                $path = storage_path('app/' . $order->payment_image_path);
+                if (file_exists($path)) {
+                    @unlink($path);
+                }
+            }
+
+            $order->update([
+                'payment_type' => null,
+                'payment_image_path' => null,
+                'payment_verified_at' => null,
+                'payment_verified_by' => null,
+                'payment_status' => false,
+            ]);
+        } elseif ($paymentType === 'online') {
+            // For other payment types just update the type
+            $order->update([
+                'payment_type' => $paymentType,
+            ]);
+        }
+
+        $order->refresh();
+
+        return response()->json([
+            'message' => 'Payment type updated successfully.',
+            'payment_image_path' => $order->payment_image_path,
+        ], 200);
+    }
+
     public function showPaymentImage(Order $order)
     {
         if (!$order->payment_image_path) {

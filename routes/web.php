@@ -81,6 +81,7 @@ Route::middleware([
     Route::get('/orders/{order}/payment-image', [\App\Http\Controllers\OrderController::class, 'showPaymentImage'])->name('orders.payment-image');
     Route::post('/orders/{order}/update-status', [\App\Http\Controllers\OrderController::class, 'updateStatus'])->name('orders.update-status');
     Route::post('/orders/{order}/update-payment-verification', [\App\Http\Controllers\OrderController::class, 'updatePaymentVerification'])->name('orders.update-payment-verification');
+    Route::post('/orders/{order}/update-payment-type', [\App\Http\Controllers\OrderController::class, 'updatePaymentType'])->name('orders.update-payment-type');
     Route::post('/orders/{order}/items/{itemId}', [\App\Http\Controllers\OrderController::class, 'updateOrderItem'])->name('orders.update');
     Route::delete('/orders/{order}/items/{itemId}', [\App\Http\Controllers\OrderController::class, 'deleteOrderItem'])->name('orders.deleteItem');
 
