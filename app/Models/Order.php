@@ -89,6 +89,11 @@ class Order extends Model
             $query->whereIn('status', $request->status == 'all' ? ['pending', 'preparing', 'delivered', 'completed', 'cancelled'] : [$request->status]);
         }
 
+        if ($request->has('order_sort')) {
+            $sortDirection = in_array($request->order_sort, ['asc', 'desc']) ? $request->order_sort : 'asc';
+            $query->orderBy('created_at', $sortDirection);
+        }
+
         // if ($request->has('date_from') && !empty($request->date_from)) {
         //     $query->whereDate('created_at', '>=', $request->date_from);
         // }
