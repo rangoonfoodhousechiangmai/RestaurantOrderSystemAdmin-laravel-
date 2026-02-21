@@ -25,6 +25,14 @@
                     </option>
                 </select>
             </div>
+            <div class="col-md-6 mb-3">
+                <label for="order_sort">Order Sorting</label>
+                <select class="form-control form-control-sm" id="order_sort" name="order_sort">
+                    <option value="">Order Sort</option>
+                    <option value="asc" {{ request('order_sort') == 'asc' ? 'selected' : '' }}>Ascending</option>
+                    <option value="desc" {{ request('order_sort') == 'desc' ? 'selected' : '' }}>Descending</option>
+                </select>
+            </div>
             <input type="hidden" name="status" value="{{ request('status') }}">
             {{-- @if (!request('status') || request('status') == 'all')
                 <div class="col-md-6 mb-3">
@@ -58,7 +66,7 @@
                 </div>
             @endif --}}
         </div>
-        <div class="mt-3">
+        <div class="mt-3 float-end">
             <a href="{{ route('orders.index') }}" class="btn btn-danger text-white">Reset</a>
             <button type="submit" class="btn btn-primary">Search</button>
         </div>

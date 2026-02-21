@@ -35,29 +35,29 @@
         <ul class="nav nav-tabs mt-2" id="orderTabs" role="tablist">
             <li class="nav-item">
                 <a class="nav-link {{ !$status ? 'active' : '' }}"
-                    href="?status=&order_code={{ request('order_code') }}&table_slug={{ request('table_slug') }}&order_type={{ request('order_type') }}">All</a>
+                    href="?status=&order_code={{ request('order_code') }}&table_slug={{ request('table_slug') }}&order_type={{ request('order_type') }}&order_sort={{ request('order_sort') }}">All</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ request('status') == 'pending' ? 'active' : '' }}"
-                    href="?status=pending&order_code={{ request('order_code') }}&table_slug={{ request('table_slug') }}&order_type={{ request('order_type') }}">
+                    href="?status=pending&order_code={{ request('order_code') }}&table_slug={{ request('table_slug') }}&order_type={{ request('order_type') }}&order_sort={{ request('order_sort') }}">
                     Pending
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ request('status') == 'preparing' ? 'active' : '' }}"
-                    href="?status=preparing&order_code={{ request('order_code') }}&table_slug={{ request('table_slug') }}&order_type={{ request('order_type') }}">Preparing</a>
+                    href="?status=preparing&order_code={{ request('order_code') }}&table_slug={{ request('table_slug') }}&order_type={{ request('order_type') }}&order_sort={{ request('order_sort') }}">Preparing</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ request('status') == 'delivered' ? 'active' : '' }}"
-                    href="?status=delivered&order_code={{ request('order_code') }}&table_slug={{ request('table_slug') }}&order_type={{ request('order_type') }}">Delivered</a>
+                    href="?status=delivered&order_code={{ request('order_code') }}&table_slug={{ request('table_slug') }}&order_type={{ request('order_type') }}&order_sort={{ request('order_sort') }}">Delivered</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ request('status') == 'completed' ? 'active' : '' }}"
-                    href="?status=completed&order_code={{ request('order_code') }}&table_slug={{ request('table_slug') }}&order_type={{ request('order_type') }}">Completed</a>
+                    href="?status=completed&order_code={{ request('order_code') }}&table_slug={{ request('table_slug') }}&order_type={{ request('order_type') }}&order_sort={{ request('order_sort') }}">Completed</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ request('status') == 'cancelled' ? 'active' : '' }}"
-                    href="?status=cancelled&order_code={{ request('order_code') }}&table_slug={{ request('table_slug') }}&order_type={{ request('order_type') }}">Cancelled</a>
+                    href="?status=cancelled&order_code={{ request('order_code') }}&table_slug={{ request('table_slug') }}&order_type={{ request('order_type') }}&order_sort={{ request('order_sort') }}">Cancelled</a>
             </li>
         </ul>
 
@@ -74,6 +74,7 @@
                         <th>TotalPrice</th>
                         <th>TotalQty</th>
                         <th>OrderStatus</th>
+                        <th>PaymentType</th>
                         <th>PaymentImage</th>
                         <th>PaymentVerify</th>
                     </tr>
@@ -107,6 +108,20 @@
                                 </select>
                             </td>
                             <td>
+                                {{-- @if ($order->isUnpaid()) --}}
+                                <select class="form-select payment-type-select" data-order-id="{{ $order->id }}"
+                                    data-url="{{ route('orders.update-payment-type', $order) }}" style="width:auto;">
+                                    <option value="" {{ $order->isUnpaid() ? 'selected' : '' }}>Unpaid</option>
+                                    <option value="cash" {{ $order->isPaymentCash() ? 'selected' : '' }}>Cash
+                                    </option>
+                                    <option value="online" {{ $order->isPaymentOnline() ? 'selected' : '' }}>Online
+                                    </option>
+                                </select>
+                                {{-- @else
+                                    -
+                                @endif --}}
+                            </td>
+                            <td>
                                 @if ($order->payment_image_path)
                                     <a href="{{ route('orders.payment-image', $order) }}" class="text-decoration-underline"
                                         target="_blank">Check
@@ -116,7 +131,7 @@
                                 @endif
                             </td>
                             <td>
-                                @if ($order->isPaid())
+                                @if ($order->isPaid() || $order->isPaymentOnline() || $order->isPaymentCash())
                                     <select class="form-select payment-verification-select"
                                         data-order-id="{{ $order->id }}" style="width:auto;">
                                         <option value="false" {{ !$order->isPaymentVerified() ? 'selected' : '' }}>Pending
@@ -146,10 +161,46 @@
 @push('js')
     <script>
         $(document).ready(function() {
+
+            $('.payment-type-select').on('change', function() {
+                var orderId = $(this).data('order-id');
+                var paymentType = $(this).val();
+                var selectElement = $(this);
+                var url = $(this).data('url');
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: {
+                        payment_type: paymentType,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        toastr.success(response.message);
+                        var row = selectElement.closest('tr');
+                        var paymentImageCell = row.find('td').eq(8); // payment image column
+
+                        if (!response.payment_image_path) {
+                            paymentImageCell.html('-');
+                        } else {
+                            var anchor = '<a href="/orders/' + orderId +
+                                '/payment-image" class="text-decoration-underline" target="_blank">Check Payment</a>';
+                            paymentImageCell.html(anchor);
+                        }
+                        window.location.reload();
+
+                    },
+                    error: function(xhr) {
+                        toastr.error('Failed to update payment type.');
+                        selectElement.val(selectElement.data('original-value'));
+                    }
+                });
+            });
+
             $('.status-select').on('change', function() {
                 var orderId = $(this).data('order-id');
                 var status = $(this).val();
-                console.log(status);
+
                 var selectElement = $(this);
                 var url = $(this).data('url');
 
@@ -162,6 +213,7 @@
                     },
                     success: function(response) {
                         toastr.success(response.message);
+
                     },
                     error: function(xhr) {
                         toastr.error('Failed to update order status.');
@@ -185,6 +237,7 @@
                     },
                     success: function(response) {
                         toastr.success(response.message);
+                        // window.location.reload();
                     },
                     error: function(xhr) {
                         toastr.error('Failed to update payment verification.');
@@ -200,6 +253,10 @@
             });
 
             $('.payment-verification-select').each(function() {
+                $(this).data('original-value', $(this).val());
+            });
+
+            $('.payment-type-select').each(function() {
                 $(this).data('original-value', $(this).val());
             });
         });

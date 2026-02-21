@@ -23,9 +23,9 @@
                     <tr>
                         <th>No</th>
                         <th>Name</th>
-                        <th>Modifier Type</th>
+                        <th>Modifier</th>
                         <th>Price</th>
-                        <th>Selection Type</th>
+                        <th>Selection</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -95,7 +95,8 @@
                             <div class="invalid-feedback" data-error-for="mm_name"></div>
                         </div>
                         <div class="mb-3">
-                            <label for="type" class="form-label">Modifier Type <span class="text-danger">*</span></label>
+                            <label for="type" class="form-label">Modifier Type <span
+                                    class="text-danger">*</span></label>
                             <select class="form-control" id="type" name="type" required>
                                 <option value="" disabled selected>Select Modifier Type</option>
 
@@ -112,7 +113,8 @@
                             <div class="invalid-feedback" data-error-for="price"></div>
                         </div>
                         <div class="mb-3">
-                            <label for="selection_type" class="form-label">Choose Selection Type <span class="text-danger">*</span></label>
+                            <label for="selection_type" class="form-label">Choose Selection Type <span
+                                    class="text-danger">*</span></label>
                             <select class="form-control" id="selection_type" name="selection_type" required>
                                 <option value="" disabled selected>Choose Selection Type</option>
                                 <option value="single">Single</option>

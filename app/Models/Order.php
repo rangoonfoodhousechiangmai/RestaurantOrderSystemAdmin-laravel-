@@ -37,6 +37,22 @@ class Order extends Model
     }
 
 
+    public function isPaymentCash(): bool
+    {
+        return $this->payment_type === 'cash';
+    }
+
+    public function isPaymentOnline(): bool
+    {
+        return $this->payment_type === 'online';
+    }
+
+    public function isUnpaid(): bool
+    {
+        return !$this->payment_status && $this->payment_type === null;
+    }
+
+
     public function isPaid(): bool
     {
         return (bool) $this->payment_status;
@@ -71,6 +87,11 @@ class Order extends Model
 
         if ($request->has('status') && !empty($request->status)) {
             $query->whereIn('status', $request->status == 'all' ? ['pending', 'preparing', 'delivered', 'completed', 'cancelled'] : [$request->status]);
+        }
+
+        if ($request->has('order_sort')) {
+            $sortDirection = in_array($request->order_sort, ['asc', 'desc']) ? $request->order_sort : 'asc';
+            $query->orderBy('created_at', $sortDirection);
         }
 
         // if ($request->has('date_from') && !empty($request->date_from)) {
