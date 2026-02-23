@@ -22,6 +22,9 @@ use App\Http\Controllers\TableController;
 
 
 Route::get('/', function () {
+    if (auth()->check()) {
+        return redirect('/dashboard');
+    }
     return view('auth.login');
 });
 

@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => ['https://www.rangoonfoodhousecnx.com', 'https://rangoonfoodhousecnx.com'],
 
     'allowed_origins_patterns' => [],
 
