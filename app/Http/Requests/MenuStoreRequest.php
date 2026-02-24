@@ -28,7 +28,7 @@ class MenuStoreRequest extends FormRequest
             'price' => 'required|integer|min:0',
             'eng_description' => 'nullable|string',
             'mm_description' => 'nullable|string',
-            'image_path' => 'nullable|image|max:2048', // max 2MB, adjust as per requirements
+            'image_path' => 'nullable|image|max:5120', // max 2MB, adjust as per requirements
             'is_available' => 'sometimes|boolean',
         ];
     }
