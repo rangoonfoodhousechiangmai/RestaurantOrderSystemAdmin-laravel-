@@ -9,7 +9,7 @@
         </div>
         <div class="col-md-5">
             <div class="card shadow border-0">
-                <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
+                <div class="card-header bg-warning text-white d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center">
                         <i class="fas fa-chart-line me-2"></i>
                         <h5 class="mb-0">Most Selling Items</h5>
@@ -51,7 +51,7 @@
         </div>
         <div class="col-md-6 ">
             <div class="col-12 card shadow border-0">
-                <h5 class="card-header bg-primary text-white">Today's Summary</h5>
+                <h5 class="card-header bg-warning text-white">Today's Summary</h5>
                 <div class="card-body">
                     <div class="row flex-column flex-sm-row">
                         <div class="col-12 col-sm-5">
@@ -68,7 +68,7 @@
             <div class="row mt-3">
                 <div class="col-12">
                     <div class="card shadow border-0">
-                        <div class="card-header bg-primary text-white">
+                        <div style="background-color: rgba(255, 193, 0, 1)" class="card-header text-white"> 
                             <h5 class="mb-0">Weekly Order Counts</h5>
                         </div>
                         <div class="card-body" style="height: 400px;">

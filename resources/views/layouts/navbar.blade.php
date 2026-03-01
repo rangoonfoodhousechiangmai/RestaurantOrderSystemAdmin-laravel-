@@ -1,12 +1,12 @@
 <!-- partial:partials/_navbar.html -->
 <nav class="navbar col-12 fixed-top d-flex flex-row p-0">
-    <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
-        <p class="fs-4 text-wrap fw-bolder" style="z-index: 999;">Rangoon Food House</p>
-        {{-- <img src="{{ asset('images/logo.jpg') }}" width="50px" height="50px" alt=""> --}}
+    <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start" style="background-color: black;" >
+        <!-- <p class="fs-4 text-wrap fw-bolder" style="z-index: 999;">Rangoon Food House</p> -->
+        <img src="{{ asset('images/brand.jpg') }}" width="55px" height="55px" alt=""> 
     </div>
-    <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+    <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end" style="background-color: black;">
         <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
-            <i class="icon-menu"></i>
+            <i class="icon-menu text-white"></i>
         </button>
         <ul class="navbar-nav navbar-nav-right">
             {{-- <li class="nav-item dropdown me-3">
@@ -49,7 +49,7 @@
 
             <li class="nav-item nav-profile dropdown">
                 <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
-                    <span class="">{{ Auth::user()->name }}</span>
+                    <span class="text-white">{{ Auth::user()->name }}</span>
                     <img src="{{ asset('src/assets/images/default-user-image.svg') }}" alt="profile" />
                     {{-- <img src="{{ asset('storage/'.  $LoggedUserInfo->picture) }}" alt="profile" /> --}}
                 </a>
@@ -71,7 +71,7 @@
         </ul>
         <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
             data-toggle="offcanvas">
-            <span class="icon-menu"></span>
+            <span class="icon-menu text-white"></span>
         </button>
     </div>
 </nav>
