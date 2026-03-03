@@ -29,11 +29,30 @@ class OrderController extends Controller
         return view('orders.index', compact('orders', 'status', 'tables'));
     }
 
+    public function history()
+    {
+        $orders = Order::with('table')
+            ->filterHistory(request())
+            ->where('status', 'completed')
+            ->whereNotNull('payment_verified_at')
+            ->get();
+        // dd($orders);
+
+        return view('orders.history', compact('orders'));
+    }
+
     public function show(Order $order)
     {
         $order->load(['orderItems.menu', 'orderItems.orderItemModifiers.modifier']);
 
         return view('orders.order-items', compact('order'));
+    }
+
+    public function showHistoryOrder(Order $order)
+    {
+        $order->load(['orderItems.menu', 'orderItems.orderItemModifiers.modifier']);
+
+        return view('orders.history-order-items', compact('order'));
     }
 
     public function updateOrderItem(Request $request, Order $order, $itemId)
@@ -198,6 +217,7 @@ class OrderController extends Controller
 
         if ($payment_verified) {
             $order->update([
+                'status' => 'completed',
                 'payment_verified_at' => now(),
                 'payment_verified_by' => auth()->id(),
             ]);

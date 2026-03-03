@@ -88,4 +88,9 @@ Route::middleware([
     Route::post('/orders/{order}/items/{itemId}', [\App\Http\Controllers\OrderController::class, 'updateOrderItem'])->name('orders.update');
     Route::delete('/orders/{order}/items/{itemId}', [\App\Http\Controllers\OrderController::class, 'deleteOrderItem'])->name('orders.deleteItem');
 
+    // order history
+    Route::get('/order-history', [\App\Http\Controllers\OrderController::class, 'history'])->name('orders.history');
+    Route::get('/order-history/{order}', [\App\Http\Controllers\OrderController::class, 'showHistoryOrder'])->name('orders.history.show');
+
+
 });
