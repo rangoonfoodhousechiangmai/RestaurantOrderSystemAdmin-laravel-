@@ -20,7 +20,6 @@ use App\Http\Controllers\TableController;
 |
 */
 
-
 Route::get('/', function () {
     if (auth()->check()) {
         return redirect('/dashboard');
@@ -80,6 +79,7 @@ Route::middleware([
 
     // orders
     Route::get('/orders', [\App\Http\Controllers\OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/fetch', [\App\Http\Controllers\OrderController::class, 'fetchOrders'])->name('orders.fetch');
     Route::get('/orders/{order}', [\App\Http\Controllers\OrderController::class, 'show'])->name('orders.show');
     Route::get('/orders/{order}/payment-image', [\App\Http\Controllers\OrderController::class, 'showPaymentImage'])->name('orders.payment-image');
     Route::post('/orders/{order}/update-status', [\App\Http\Controllers\OrderController::class, 'updateStatus'])->name('orders.update-status');

@@ -6,7 +6,7 @@
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">Order Details - {{ $order->order_code }}</h4>
-                    <a href="{{ route('orders.index') }}" class="btn btn-secondary">Back to Orders</a>
+                    <a href="{{ route('orders.history') }}" class="btn btn-secondary">Back to Order History</a>
                 </div>
                 <div class="card-body">
                     <div class="row mb-3">
@@ -118,7 +118,7 @@
                                             <button class="btn btn-danger btn-sm delete-item ms-2"
                                                 data-item-id="{{ $item->id }}">Delete</button>
                                         </td>
-                                        
+
                                     </tr>
                                 @empty
                                     <tr>

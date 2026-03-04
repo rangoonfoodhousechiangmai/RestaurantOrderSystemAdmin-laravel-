@@ -29,6 +29,57 @@ class OrderController extends Controller
         return view('orders.index', compact('orders', 'status', 'tables'));
     }
 
+    /**
+     * API endpoint for fetching orders data as JSON (used for auto-refresh)
+     */
+    public function fetchOrders()
+    {
+        $status = request('status');
+
+        $orders = Order::with('table')
+            ->filter(request())
+            ->whereDate('created_at', now()->toDateString())
+            ->get();
+
+        $tables = Table::whereNull('deleted_at')->get();
+
+        return response()->json([
+            'orders' => $orders->map(function ($order) {
+                return [
+                    'id' => $order->id,
+                    'order_code' => $order->order_code,
+                    'created_at' => $order->created_at->format('Y-m-d H:i'),
+                    'table' => $order->table ? $order->table->slug : ($order->table_name ?? 'N/A'),
+                    'order_type' => ucfirst($order->order_type),
+                    'total_price' => number_format($order->total_price, 2),
+                    'total_qty' => $order->total_qty,
+                    'status' => $order->status,
+                    'payment_type' => $order->payment_type,
+                    'payment_image_path' => $order->payment_image_path,
+                    'is_paid' => $order->isPaid(),
+                    'is_payment_cash' => $order->isPaymentCash(),
+                    'is_payment_online' => $order->isPaymentOnline(),
+                    'is_payment_verified' => $order->isPaymentVerified(),
+                    'is_unpaid' => $order->isUnpaid(),
+                    'urls' => [
+                        'show' => route('orders.show', $order),
+                        'update_status' => route('orders.update-status', $order),
+                        'update_payment_type' => route('orders.update-payment-type', $order),
+                        'update_payment_verification' => route('orders.update-payment-verification', $order),
+                        'payment_image' => $order->payment_image_path ? route('orders.payment-image', $order) : null,
+                    ]
+                ];
+            }),
+            'tables' => $tables->map(function ($table) {
+                return [
+                    'id' => $table->id,
+                    'slug' => $table->slug,
+                ];
+            }),
+            'current_status' => $status,
+        ]);
+    }
+
     public function history()
     {
         $orders = Order::with('table')

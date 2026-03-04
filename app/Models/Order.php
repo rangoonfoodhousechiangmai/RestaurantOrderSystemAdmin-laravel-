@@ -104,4 +104,20 @@ class Order extends Model
 
         return $query;
     }
+
+    public function scopeFilterHistory($query, $request)
+    {
+        if ($request->has('start_date') && !empty($request->start_date)) {
+            $query->whereDate('created_at', '>=', $request->start_date);
+        }
+
+        if ($request->has('end_date') && !empty($request->end_date)) {
+            $query->whereDate('created_at', '<=', $request->end_date);
+        }
+
+        // $sortDirection = $request->order_sort === 'asc' ? 'asc' : 'desc';
+        // $query->orderBy('created_at', $sortDirection);
+
+        return $query;
+    }
 }
