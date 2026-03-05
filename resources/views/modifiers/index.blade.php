@@ -104,6 +104,7 @@
                                 <option value="avoid">Avoid</option>
                                 <option value="addon">Addon</option>
                                 <option value="flavor">Flavor</option>
+                                <option value="portion">Portion</option>
                             </select>
                             <div class="invalid-feedback" data-error-for="type"></div>
                         </div>
@@ -162,6 +163,7 @@
                                 <option value="avoid">Avoid</option>
                                 <option value="addon">Addon</option>
                                 <option value="flavor">Flavor</option>
+                                <option value="portion">Portion</option>
                             </select>
                             <div class="invalid-feedback" data-error-for="edit_type"></div>
                         </div>

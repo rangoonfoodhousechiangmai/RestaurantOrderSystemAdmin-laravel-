@@ -46,8 +46,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .last-updated {
@@ -58,7 +63,7 @@
             background: white;
             padding: 8px 12px;
             border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             font-size: 12px;
             color: #666;
         }
@@ -209,10 +214,31 @@
 @push('js')
     <script>
         $(document).ready(function() {
+            // Function to initialize Select2 on select elements
+            function initSelect2() {
+                // Destroy existing Select2 instances first to avoid conflicts
+                $('.status-select').select2('destroy');
+                $('.payment-type-select').select2('destroy');
+                $('.payment-verification-select').select2('destroy');
+
+                // Initialize Select2 with minimal configuration
+                $('.status-select').select2({
+                    minimumResultsForSearch: Infinity,
+                    width: 'auto'
+                });
+                $('.payment-type-select').select2({
+                    minimumResultsForSearch: Infinity,
+                    width: 'auto'
+                });
+                $('.payment-verification-select').select2({
+                    minimumResultsForSearch: Infinity,
+                    width: 'auto'
+                });
+            }
+
             // Function to get current filter params from URL
             function getFilterParams() {
                 const urlParams = new URLSearchParams(window.location.search);
-                console.log(urlParams);
                 return {
                     status: urlParams.get('status') || '',
                     order_code: urlParams.get('order_code') || '',
@@ -242,7 +268,7 @@
                             <td>${order.total_price} THB</td>
                             <td>${order.total_qty}</td>
                             <td>
-                                <select class="form-select status-select" data-order-id="${order.id}"
+                                <select class="form-select status-select text-dark" data-order-id="${order.id}"
                                     data-url="${order.urls.update_status}" style="width:auto;">
                                     <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>Pending</option>
                                     <option value="preparing" ${order.status === 'preparing' ? 'selected' : ''}>Preparing</option>
@@ -252,7 +278,7 @@
                                 </select>
                             </td>
                             <td>
-                                <select class="form-select payment-type-select" data-order-id="${order.id}"
+                                <select class="form-select payment-type-select text-dark" data-order-id="${order.id}"
                                     data-url="${order.urls.update_payment_type}" style="width:auto;">
                                     <option value="" ${order.is_unpaid ? 'selected' : ''}>Unpaid</option>
                                     <option value="cash" ${order.is_payment_cash ? 'selected' : ''}>Cash</option>
@@ -266,11 +292,11 @@
                             </td>
                             <td>
                                 ${(order.is_paid || order.is_payment_cash || order.is_payment_online)
-                                    ? `<select class="form-select payment-verification-select"
-                                        data-order-id="${order.id}" style="width:auto;">
-                                        <option value="false" ${!order.is_payment_verified ? 'selected' : ''}>Pending</option>
-                                        <option value="true" ${order.is_payment_verified ? 'selected' : ''}>Verified</option>
-                                    </select>`
+                                    ? `<select class="form-select payment-verification-select text-dark"
+                                                data-order-id="${order.id}" style="width:auto;">
+                                                <option value="false" ${!order.is_payment_verified ? 'selected' : ''}>Pending</option>
+                                                <option value="true" ${order.is_payment_verified ? 'selected' : ''}>Verified</option>
+                                            </select>`
                                     : '-'}
                             </td>
                         </tr>
@@ -280,6 +306,9 @@
 
                 // Re-attach event handlers for the new elements
                 attachEventHandlers();
+
+                // // Initialize Select2 on the new select elements
+                initSelect2();
 
                 // Store original values
                 $('.status-select').each(function() {
@@ -301,7 +330,7 @@
                 $('#refreshIndicator').addClass('active');
 
                 $.ajax({
-                    url: '{{ route("orders.fetch") }}?' + queryString,
+                    url: '{{ route('orders.fetch') }}?' + queryString,
                     type: 'GET',
                     success: function(response) {
                         renderOrdersTable(response.orders);
@@ -390,6 +419,7 @@
                         },
                         success: function(response) {
                             toastr.success(response.message);
+                            window.location.reload();
                         },
                         error: function(xhr) {
                             toastr.error('Failed to update payment verification.');
@@ -401,6 +431,10 @@
 
             // Initialize event handlers on page load
             attachEventHandlers();
+
+            // Initialize Select2 on page load
+            // initSelect2();
+
 
             // Store original values on page load
             $('.status-select').each(function() {
