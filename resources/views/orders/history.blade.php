@@ -41,6 +41,10 @@
                 </tbody>
             </table>
         </div>
+        <!-- Pagination -->
+        <div class="d-flex justify-content-start mt-3">
+            {{ $orders->appends(request()->query())->links() }}
+        </div>
 
         {{-- </div> --}}
     </div>

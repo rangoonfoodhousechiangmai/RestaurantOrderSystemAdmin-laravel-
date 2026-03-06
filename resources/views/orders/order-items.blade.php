@@ -45,7 +45,7 @@
                             <tbody>
                                 @forelse($order->orderItems as $item)
                                     <tr data-item-id="{{ $item->id }}">
-                                        <td>{{ $item->menu->eng_name }}</td>
+                                        <td>{{ $item->menu ? $item->menu->eng_name . ' / ' . $item->menu->mm_name : '-' }}</td>
                                         <td>
                                             <input type="number" class="form-control quantity-input"
                                                 value="{{ $item->quantity }}" min="1" style="width: 80px;">

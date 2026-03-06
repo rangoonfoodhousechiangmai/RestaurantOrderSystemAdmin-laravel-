@@ -86,7 +86,8 @@ class OrderController extends Controller
             ->filterHistory(request())
             ->where('status', 'completed')
             ->whereNotNull('payment_verified_at')
-            ->get();
+            ->orderby('created_at', 'desc')
+            ->paginate(20);
         // dd($orders);
 
         return view('orders.history', compact('orders'));

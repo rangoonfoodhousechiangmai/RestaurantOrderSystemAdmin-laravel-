@@ -215,26 +215,26 @@
     <script>
         $(document).ready(function() {
             // Function to initialize Select2 on select elements
-            function initSelect2() {
-                // Destroy existing Select2 instances first to avoid conflicts
-                $('.status-select').select2('destroy');
-                $('.payment-type-select').select2('destroy');
-                $('.payment-verification-select').select2('destroy');
+            // function initSelect2() {
+            //     // Destroy existing Select2 instances first to avoid conflicts
+            //     $('.status-select').select2('destroy');
+            //     $('.payment-type-select').select2('destroy');
+            //     $('.payment-verification-select').select2('destroy');
 
-                // Initialize Select2 with minimal configuration
-                $('.status-select').select2({
-                    minimumResultsForSearch: Infinity,
-                    width: 'auto'
-                });
-                $('.payment-type-select').select2({
-                    minimumResultsForSearch: Infinity,
-                    width: 'auto'
-                });
-                $('.payment-verification-select').select2({
-                    minimumResultsForSearch: Infinity,
-                    width: 'auto'
-                });
-            }
+            //     // Initialize Select2 with minimal configuration
+            //     $('.status-select').select2({
+            //         minimumResultsForSearch: Infinity,
+            //         width: 'auto'
+            //     });
+            //     $('.payment-type-select').select2({
+            //         minimumResultsForSearch: Infinity,
+            //         width: 'auto'
+            //     });
+            //     $('.payment-verification-select').select2({
+            //         minimumResultsForSearch: Infinity,
+            //         width: 'auto'
+            //     });
+            // }
 
             // Function to get current filter params from URL
             function getFilterParams() {
@@ -308,7 +308,7 @@
                 attachEventHandlers();
 
                 // // Initialize Select2 on the new select elements
-                initSelect2();
+                // initSelect2();
 
                 // Store original values
                 $('.status-select').each(function() {
@@ -397,6 +397,7 @@
                         },
                         success: function(response) {
                             toastr.success(response.message);
+                            window.location.reload();
                         },
                         error: function(xhr) {
                             toastr.error('Failed to update order status.');

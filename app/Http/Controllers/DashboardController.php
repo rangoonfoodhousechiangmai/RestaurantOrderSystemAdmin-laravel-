@@ -30,7 +30,7 @@ class DashboardController extends Controller
             'menus.mm_name',
             DB::raw('SUM(order_items.quantity) as total_sold_quantity')
         )
-            ->leftjoin('menus', 'menus.id', '=', 'order_items.menu_id')
+            ->join('menus', 'menus.id', '=', 'order_items.menu_id')
             ->leftjoin('orders', 'orders.id', '=', 'order_items.order_id')
             ->where('orders.status', 'completed')
             ->whereNotNull('orders.payment_verified_at')
