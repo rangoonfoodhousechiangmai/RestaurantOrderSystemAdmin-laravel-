@@ -60,7 +60,7 @@ class PaymentController extends Controller
 
             // Update order with payment information
             $order->update([
-                'payment_type' => 'online',
+'payment_type' => 'prompt_pay',
                 'payment_status' => true,
                 'payment_image_path' => $imagePath,
             ]);

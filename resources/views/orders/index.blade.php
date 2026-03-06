@@ -134,7 +134,13 @@
                 </thead>
                 <tbody>
                     @forelse($orders as $order)
-                        <tr>
+                        <tr class="
+                            {{ $order->status === 'pending' ? 'table-warning' :
+                            ($order->status === 'delivered' ? 'table-secondary' :
+                            ($order->status === 'preparing' ? 'table-info' :
+                            ($order->status === 'completed' ? 'table-success' :
+                            ($order->status === 'cancelled' ? 'table-danger' : ''))))
+                        }}">
                             <td><a href="{{ route('orders.show', $order) }}">{{ $order->order_code }}</a></td>
                             <td>{{ $order->created_at->format('Y-m-d H:i') }}</td>
                             <td>{{ $order->table->slug ?? ($order->table_name ?? 'N/A') }}</td>
@@ -167,7 +173,7 @@
                                     <option value="" {{ $order->isUnpaid() ? 'selected' : '' }}>Unpaid</option>
                                     <option value="cash" {{ $order->isPaymentCash() ? 'selected' : '' }}>Cash
                                     </option>
-                                    <option value="online" {{ $order->isPaymentOnline() ? 'selected' : '' }}>Online
+<option value="prompt_pay" {{ $order->isPaymentPromptPay() ? 'selected' : '' }}>PromptPay
                                     </option>
                                 </select>
                                 {{-- @else
@@ -184,7 +190,7 @@
                                 @endif
                             </td>
                             <td>
-                                @if ($order->isPaid() || $order->isPaymentOnline() || $order->isPaymentCash())
+@if ($order->isPaid() || $order->isPaymentPromptPay() || $order->isPaymentCash())
                                     <select class="form-select payment-verification-select"
                                         data-order-id="{{ $order->id }}" style="width:auto;">
                                         <option value="false" {{ !$order->isPaymentVerified() ? 'selected' : '' }}>Pending
@@ -236,6 +242,14 @@
             //     });
             // }
 
+            const orderStatusColors = {
+                pending: 'table-warning',
+                delivered: 'table-secondary',
+                preparing: 'table-info',
+                completed: 'table-success',
+                cancelled: 'table-danger'
+            };
+
             // Function to get current filter params from URL
             function getFilterParams() {
                 const urlParams = new URLSearchParams(window.location.search);
@@ -260,7 +274,7 @@
 
                 orders.forEach(function(order) {
                     const row = `
-                        <tr>
+                        <tr class="${orderStatusColors[order.status] || ''}">
                             <td><a href="${order.urls.show}">${order.order_code}</a></td>
                             <td>${order.created_at}</td>
                             <td>${order.table}</td>
@@ -282,7 +296,7 @@
                                     data-url="${order.urls.update_payment_type}" style="width:auto;">
                                     <option value="" ${order.is_unpaid ? 'selected' : ''}>Unpaid</option>
                                     <option value="cash" ${order.is_payment_cash ? 'selected' : ''}>Cash</option>
-                                    <option value="online" ${order.is_payment_online ? 'selected' : ''}>Online</option>
+<option value="prompt_pay" ${order.is_payment_online ? 'selected' : ''}>PromptPay</option>
                                 </select>
                             </td>
                             <td>
@@ -291,7 +305,7 @@
                                     : '-'}
                             </td>
                             <td>
-                                ${(order.is_paid || order.is_payment_cash || order.is_payment_online)
+${(order.is_paid || order.is_payment_cash || order.is_payment_online)
                                     ? `<select class="form-select payment-verification-select text-dark"
                                                 data-order-id="${order.id}" style="width:auto;">
                                                 <option value="false" ${!order.is_payment_verified ? 'selected' : ''}>Pending</option>

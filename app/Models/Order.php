@@ -42,9 +42,9 @@ class Order extends Model
         return $this->payment_type === 'cash';
     }
 
-    public function isPaymentOnline(): bool
+    public function isPaymentPromptPay(): bool
     {
-        return $this->payment_type === 'online';
+        return $this->payment_type === 'prompt_pay';
     }
 
     public function isUnpaid(): bool

@@ -58,7 +58,7 @@ class OrderController extends Controller
                     'payment_image_path' => $order->payment_image_path,
                     'is_paid' => $order->isPaid(),
                     'is_payment_cash' => $order->isPaymentCash(),
-                    'is_payment_online' => $order->isPaymentOnline(),
+'is_payment_online' => $order->isPaymentPromptPay(),
                     'is_payment_verified' => $order->isPaymentVerified(),
                     'is_unpaid' => $order->isUnpaid(),
                     'urls' => [
@@ -286,7 +286,7 @@ class OrderController extends Controller
     public function updatePaymentType(Request $request, Order $order)
     {
         $validator = Validator::make($request->all(), [
-            'payment_type' => 'nullable|in:cash,online',
+'payment_type' => 'nullable|in:cash,prompt_pay',
         ]);
 
         if ($validator->fails()) {
@@ -325,7 +325,7 @@ class OrderController extends Controller
                 'payment_verified_by' => null,
                 'payment_status' => false,
             ]);
-        } elseif ($paymentType === 'online') {
+        } elseif ($paymentType === 'prompt_pay') {
             // For other payment types just update the type
             $order->update([
                 'payment_type' => $paymentType,
