@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Table;
-use Illuminate\Support\Str;
-use App\Models\TableSession;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Table;
+use App\Models\TableSession;
+use App\Models\WaiterCall;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class TableController extends Controller
 {
@@ -71,5 +72,27 @@ class TableController extends Controller
             'user_agent' => $request->header('User-Agent'),
             'expires_at' => now()->addHours(2)
         ])->session_token;
+    }
+
+
+    public function callWaiter(Request $request)
+    {
+        $tableSession = $request->header('X-Table-Session');
+
+        $validTableSession = TableSession::validateTableSession($tableSession);
+
+        $table_id = $validTableSession->table_id;
+
+        $activeCall = WaiterCall::where('table_id', $table_id)
+            ->where('status', 'pending')
+            ->first();
+
+        if (!$activeCall) {
+            WaiterCall::create([
+                'table_id' => $table_id,
+                'status' => 'pending'
+            ]);
+        }
+        return response()->json('success');
     }
 }

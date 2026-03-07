@@ -92,5 +92,10 @@ Route::middleware([
     Route::get('/order-history', [\App\Http\Controllers\OrderController::class, 'history'])->name('orders.history');
     Route::get('/order-history/{order}', [\App\Http\Controllers\OrderController::class, 'showHistoryOrder'])->name('orders.history.show');
 
+    Route::get('call-waiter', [\App\Http\Controllers\TableController::class, 'waiterCallList'])->name('waiter-call-list');
+    Route::post('/waiter-calls/{waiterCall}/update-status', [\App\Http\Controllers\TableController::class, 'updateWaiterCallStatus'])->name('waiter-calls.update-status');
+    Route::get('/waiter-calls/count', [\App\Http\Controllers\TableController::class, 'getWaiterCallCount']);
+
+
 
 });

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Table;
+use App\Models\WaiterCall;
 use App\Services\TableQrService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -12,6 +13,7 @@ use Illuminate\Validation\Rule;
 class TableController extends Controller
 {
     public function __construct(protected TableQrService $tableQrService) {}
+
     public function index()
     {
         $tables = Table::paginate(10);
@@ -79,5 +81,42 @@ class TableController extends Controller
 
         session()->flash('success', 'QR code regenerated successfully.');
         return response()->json(['message' => 'Table deleted successfully']);
+    }
+
+    public function waiterCallList(Request $request)
+    {
+        $status = $request->get('status', 'pending');
+
+        $waiterCalls = WaiterCall::with('table')
+            ->where('status', $status)
+            ->whereDate('created_at', now()->toDateString())
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return view('tables.waiter-calls', compact('waiterCalls', 'status'));
+    }
+
+    public function getWaiterCallCount()
+    {
+        $count = WaiterCall::where('status', 'pending')
+            ->whereDate('created_at', now()->toDateString())
+            ->count();
+        return response()->json(['count' => $count]);
+    }
+
+    public function updateWaiterCallStatus(Request $request, WaiterCall $waiterCall)
+    {
+        $request->validate([
+            'status' => ['required', 'in:pending,done'],
+        ]);
+
+        $waiterCall->update([
+            'status' => $request->status,
+        ]);
+
+        return response()->json([
+            'message' => 'Waiter call status updated successfully.',
+            'waiter_call' => $waiterCall,
+        ]);
     }
 }

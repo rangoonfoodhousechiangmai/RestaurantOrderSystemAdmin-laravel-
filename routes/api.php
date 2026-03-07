@@ -22,7 +22,11 @@ Route::get('/categories', [\App\Http\Controllers\Api\CategoryController::class, 
 Route::get('/menus', [\App\Http\Controllers\Api\MenuController::class, 'index']);
 Route::get('/menus/{menu}', [\App\Http\Controllers\Api\MenuController::class, 'show']);
 
+// table verify
 Route::post('/tables/verify', [\App\Http\Controllers\Api\TableController::class, 'verify']);
+
+// waiter call
+Route::post('/tables/call-waiter', [\App\Http\Controllers\Api\TableController::class, 'callWaiter'])->middleware('throttle:3,1');
 
 // orders
 Route::post('/orders', [App\Http\Controllers\Api\OrderController::class, 'store']);

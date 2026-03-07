@@ -113,6 +113,55 @@
 
     @stack('js')
 
+    {{-- Waiter Call Badge Auto-refresh (every 30 seconds) --}}
+    <script>
+        // Create audio element for notification sound
+        var notificationSound = new Audio('{{ asset('mp3/noti-sound.mp3') }}');
+
+        function updateWaiterCallBadge() {
+            $.ajax({
+                url: '/waiter-calls/count',
+                type: 'GET',
+                success: function(response) {
+                    var badge = $('#waiter-call-badge');
+                    var currentCount = response.count;
+                    var previousCount = parseInt(sessionStorage.getItem('waiterCallCount') || '0');
+
+                    if (currentCount > 0) {
+                        badge.text(currentCount).show();
+
+
+                        // Play notification sound only if count increased (new calls came in)
+                        if (currentCount > previousCount) {
+                            notificationSound.play().catch(function(error) {
+                                console.log('Notification sound failed:', error);
+                            });
+                        }
+
+                        // Store current count in sessionStorage
+                        sessionStorage.setItem('waiterCallCount', currentCount);
+
+
+                    } else {
+                        badge.hide();
+                        sessionStorage.setItem('waiterCallCount', 0);
+                    }
+                },
+                error: function() {
+                    console.error('Failed to fetch waiter call count');
+                }
+            });
+        }
+
+        // Initial call
+        $(document).ready(function() {
+            updateWaiterCallBadge();
+
+            // Refresh every 30 seconds
+            setInterval(updateWaiterCallBadge, 30000);
+        });
+    </script>
+
 
     {{-- <script>
         @if (auth()->check())

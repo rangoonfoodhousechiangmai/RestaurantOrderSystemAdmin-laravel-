@@ -48,6 +48,13 @@
                 <span class="menu-title">Order History</span>
             </a>
         </li>
+        <li class="nav-item {{ isset($elementActive) && $elementActive == 'call-waiter' ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('waiter-call-list') }}">
+                <i class="fa-solid fa-bell fa-2x menu-icon"></i>
+                <span class="menu-title">Waiter Call</span>
+                <span id="waiter-call-badge" class="badge bg-danger ms-auto" style="display: none;">0</span>
+            </a>
+        </li>
         {{-- <li class="nav-item {{ isset($elementActive) && $elementActive == 'menu-modifiers' ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('menu-modifiers.index') }}">
                 <i class="fa-regular fa-newspaper fa-2x menu-icon"></i>
