@@ -165,7 +165,6 @@
         }
 
         function regenerateQrCode() {
-            console.log('Regenerating QR for table ID:', currentTableId);
             if (!currentTableId) {
                 toastr.error('No table selected.', 'Error');
                 return;
@@ -178,7 +177,6 @@
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(data) {
-                    console.log(data);
                     toastr.success('QR Code regenerated successfully.', 'Success');
                     location.reload();
                 },

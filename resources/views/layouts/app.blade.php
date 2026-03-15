@@ -163,69 +163,6 @@
     </script>
 
 
-    {{-- <script>
-        @if (auth()->check())
-            // Pusher.logToConsole = true;
-            var user = @json(auth()->user());
-            var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
-                cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
-                encrypted: true,
-                forceTLS: true,
-            });
-
-            var channel = pusher.subscribe('my-channel-test.' + user.id);
-
-            channel.bind('comment-notification', function(data) {
-                var badge = document.getElementById('notification-count');
-
-                if (badge) {
-                    var notiCount = parseInt(badge.innerText) || 0;
-                    notiCount++;
-                    badge.innerText = notiCount;
-
-                    // remove 'd-none' class to show badge
-                    badge.classList.remove('d-none');
-                }
-
-                // console.log('New notification:', data.message);
-            });
-
-            var chatChannel = pusher.subscribe('my-channel-test.' + user.id);
-
-            chatChannel.bind('chat-notification', function(data) {
-                console.log('Chat notification received', data);
-                var chatBadge = document.getElementById('chat-notification-count');
-
-                if (chatBadge) {
-                    var chatNotiCount = parseInt(chatBadge.innerText) || 0;
-                    chatNotiCount++;
-                    chatBadge.innerText = chatNotiCount;
-
-                    // remove 'd-none' class to show chatBadge
-                    chatBadge.classList.remove('d-none');
-                }
-
-                // console.log('New chat notification:', data.message);
-            });
-        @endif
-    </script> --}}
-    {{--
-   <script>
-
-//     // Enable pusher logging - don't include this in production
-    Pusher.logToConsole = true;
-
-     var pusher = new Pusher('4e8eae8a55fa0aa4492d', {
-       cluster: 'ap1'
-     });
-
-     var channel = pusher.subscribe('my-channel-test');
-     channel.bind('my-event-test', function(data) {
-       alert(JSON.stringify(data));
-        });
-   </script> --}}
-
-
 </body>
 
 </html>

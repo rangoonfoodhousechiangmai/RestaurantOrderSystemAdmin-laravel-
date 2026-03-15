@@ -296,7 +296,6 @@
                 url: '{{ route('menus.show', ':id') }}'.replace(':id', id),
                 type: 'GET',
                 success: function(data) {
-                    console.log(data);
                     const form = document.getElementById('editMenuForm');
                     form.action = '{{ route('menus.update', ':id') }}'.replace(':id', id);
                     $('#edit_category_id').val(data.category_id).trigger('change');
